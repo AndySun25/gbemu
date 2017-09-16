@@ -1,11 +1,15 @@
-struct registers{
+#include <stdbool.h>
+
+#pragma once
+
+struct registers {
     struct {
         union
         {
             struct
             {
-                unsigned char f;
                 unsigned char a;
+                unsigned char f;
             };
             unsigned short af;
         };
@@ -16,8 +20,8 @@ struct registers{
         {
             struct
             {
-                unsigned char c;
                 unsigned char b;
+                unsigned char c;
             };
             unsigned short bc;
         };
@@ -28,8 +32,8 @@ struct registers{
         {
             struct
             {
-                unsigned char e;
                 unsigned char d;
+                unsigned char e;
             };
             unsigned short de;
         };
@@ -40,8 +44,8 @@ struct registers{
         {
             struct
             {
-                unsigned char l;
                 unsigned char h;
+                unsigned char l;
             };
             unsigned short hl;
         };
