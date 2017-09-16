@@ -10,4 +10,6 @@ add_executable(gbemu
     include/cpu.h
     include/memory.h
     include/registers.h
-)
+    src/cpu.c
+    src/memory.c
+    src/registers.c)

@@ -30,8 +30,10 @@
 
 extern unsigned char memory[0xFFFF];
 
-void write_byte(unsigned short address, unsigned char n);
-unsigned char read_byte(unsigned short address);
+void writeByte(unsigned short address, unsigned char n);
+void writeShort(unsigned short address, unsigned short nn);
+unsigned char readByte(unsigned short address);
+unsigned short readShort(unsigned short address);
 
-void push_stack(unsigned char n);
-unsigned char pop_stack(void);
+void pushStack(unsigned char n);
+unsigned char popStack(void);
