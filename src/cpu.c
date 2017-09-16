@@ -1,6 +1,11 @@
 #include "cpu.h"
 #include "registers.h"
 #include "memory.h"
+#include <stdbool.h>
+
+
+bool stopped = false;
+
 
 const struct instruction instructions[256] = {
     {"NOP", nop},
@@ -80,3 +85,81 @@ void rrc_a(void) {
 
     registers.a >>= 1;
 }
+
+// 0x10
+void stop(void) { stopped = true; }
+
+// 0x11
+void ld_de_nn(unsigned short nn) { registers.de = nn; }
+
+// 0x12
+void ld_de_v_a(void) { writeByte(registers.de, registers.a); }
+
+// 0x13
+void inc_de(void) { registers.de++; }
+
+// 0x14
+void inc_d(void) { registers.d++; }
+
+// 0x15
+void dec_d(void) { registers.d--; }
+
+// 0x16
+void ld_d_n(unsigned char n) { registers.d = n; }
+
+// 0x17
+void rl_a(void) { registers.a <<= 1; }
+
+// 0x18
+void jr_n(short n) { registers.pc += n; }
+
+// 0x19
+void add_hl_de(void) { registers.hl += registers.de; }
+
+// 0x1A
+void ld_a_de_v(void) { registers.a = readByte(registers.de); }
+
+// 0x1B
+void dec_de(void) { registers.de--; }
+
+// 0x1C
+void inc_e(void) { registers.de++; }
+
+// 0x1D
+void dec_e(void) { registers.e--; }
+
+// 0x1E
+void ld_e_n(unsigned char n) { registers.e = n; }
+
+// 0x1F
+void rr_a(void) { registers.a >>= 1; }
+
+// 0x20
+void jr_nz_n(short n) {
+    if (~flagIsSet(FLAG_ZERO))
+        registers.pc += n;
+    else
+        // TODO Handle this somehow
+        ;
+}
+
+// 0x21
+void ld_hl_nn(unsigned short nn) { registers.hl = nn; }
+
+// 0x22
+void ldi_hl_v_a(void) { writeByte(registers.hl, registers.a + (unsigned char) 1); }
+
+// 0x23
+void inc_hl(void) { registers.hl++; }
+
+// 0x24
+void inc_h(void) { registers.h++; }
+
+// 0x25
+void dec_h(void) { registers.h--; }
+
+// 0x26
+void ld_h_n(unsigned char n) { registers.h = n; }
+
+// 0x27
+void daa(void) { /* TODO Figure out how this shit works*/ }

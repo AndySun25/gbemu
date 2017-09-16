@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdbool.h>
-
 struct registers {
     struct {
         union
