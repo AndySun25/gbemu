@@ -13,6 +13,12 @@ const struct instruction instructions[256] = {
     {"RLC A", rlc_a},
 };
 
+void reset(void) {
+    // Reset registers
+    registers.pc = 0x0100;
+    registers.sp = 0xFFFE;
+}
+
 // 0x00
 void nop(void) {}
 
