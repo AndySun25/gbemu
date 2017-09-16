@@ -1,3 +1,12 @@
+#define FLAG_ZERO   1 << 7          // If last CP result == 0
+#define FLAG_SUB    1 << 6          // If last math instruction was subtract
+#define FLAG_HC     1 << 5          // Half carry
+#define FLAG_C      1 << 4          // Carry
+
+#define flagIsSet(flag) (registers.flags & (flag))
+#define flagSet(flag) (registers.flags |= (flag))
+#define flagUnset(flag) (registers.flags &= ~(flag))
+
 struct instruction {
     char *name;
     void *function;
