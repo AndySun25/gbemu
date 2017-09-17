@@ -18,6 +18,41 @@ const struct instruction instructions[256] = {
     {"DEC B", dec_b, 0, 4},
     {"LD B n", ld_b_n, 1, 8},
     {"RLC A", rlc_a, 0, 4},
+    {"LD nn SP", ld_nn_sp, 2, 20},
+    {"ADD HL BC", add_hl_bc, 0, 8},
+    {"LD A (BC)", ld_a_bc_v, 0, 8},
+    {"DEC BC", dec_bc, 0, 8},
+    {"INC C", inc_c, 0, 4},
+    {"DEC C", dec_c, 0, 4},
+    {"LD C n", ld_c_n, 1, 8},
+    {"RRC A", rrc_a, 0, 4},
+    {"STOP", stop, 0, 4},
+    {"LD DE nn", ld_de_nn, 2, 12},
+    {"LD (DE) A", ld_de_v_a, 0, 8},
+    {"INC DE", inc_de, 0, 8},
+    {"INC D", inc_d, 0, 4},
+    {"DEC D", dec_d, 0, 4},
+    {"LD D n", ld_d_n, 1, 8},
+    {"RL A", rl_a, 0, 4},
+    {"JR n", jr_n, 1, 12},
+    {"ADD HL DE", add_hl_de, 0, 8},
+    {"LD A (DE)", ld_a_de_v, 0, 8},
+    {"DEC DE", dec_de, 0, 8},
+    {"INC E", inc_e, 0, 4},
+    {"DEC E", dec_e, 0, 4},
+    {"LD E n", ld_e_n, 1, 8},
+    {"RR A", rr_a, 0, 4},
+    {"JR NZ n", jr_nz_n, 1, 8},     // 8 cycles min, 12 if jumping (handled in func)
+    {"LD HL nn", ld_hl_nn, 2, 12},
+    {"LDI (HL) A", ldi_hl_v_a, 0, 8},
+    {"INC HL", inc_hl, 0, 8},
+    {"INC H", inc_h, 0, 4},
+    {"DEC H", dec_h, 0, 4},
+    {"LD H n", ld_h_n, 1, 8},
+    {"DAA", daa, 0, 4},
+    {"JR Z n", jr_z_n, 1, 8},       // 8 cycles min, 12 if jumping (handled in func)
+    {"ADD HL HL", add_hl_hl, 0, 8},
+    // Template: {"", , , },
 };
 
 void reset(void) {
@@ -91,6 +126,7 @@ void rlc_a(void) {
 void ld_nn_sp(unsigned short nn) { writeShort(nn, registers.sp); }
 
 // 0x09
+// TODO (on all add functions) handle carry and half-carry flags properly
 void add_hl_bc(void) { registers.hl += registers.bc; }
 
 // 0x0A
