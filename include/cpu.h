@@ -9,7 +9,7 @@
 
 struct instruction {
     char *name;
-    void (*func)();
+    void *func;
     unsigned short operand_length;
 } extern const instructions[256];
 
