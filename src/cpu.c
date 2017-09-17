@@ -55,10 +55,13 @@ const struct instruction instructions[256] = {
     // Template: {"", , , },
 };
 
+unsigned long cycles;
+
 void reset(void) {
     // Reset registers
     registers.pc = 0x0100;
     registers.sp = 0xFFFE;
+    cycles = 0;
 }
 
 void cycle(void) {
