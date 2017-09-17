@@ -55,37 +55,25 @@ void cycle(void) {
 }
 
 // 0x00
-void nop(void) { registers.pc++; }
+void nop(void) {}
 
 // 0x01
-void ld_bc_nn(unsigned short nn) {
-    registers.bc = nn;
-}
+void ld_bc_nn(unsigned short nn) { registers.bc = nn; }
 
 // 0x02
-void ld_bc_v_a(void) {
-    writeByte(registers.bc, registers.a);
-}
+void ld_bc_v_a(void) { writeByte(registers.bc, registers.a); }
 
 // 0x03
-void inc_bc(void) {
-    registers.bc++;
-}
+void inc_bc(void) { registers.bc++; }
 
 // 0x04
-void inc_b(void) {
-    registers.b++;
-}
+void inc_b(void) { registers.b++; }
 
 // 0x05
-void dec_b(void) {
-    registers.b--;
-}
+void dec_b(void) { registers.b--; }
 
 // 0x06
-void ld_b_n(unsigned char n) {
-    registers.b = n;
-}
+void ld_b_n(unsigned char n) { registers.b = n; }
 
 // 0x07
 void rlc_a(void) {
