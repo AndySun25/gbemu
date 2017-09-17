@@ -9,7 +9,8 @@
 
 struct instruction {
     char *name;
-    void *function;
+    void (*func)();
+    unsigned short operand_length;
 } extern const instructions[256];
 
 extern unsigned long ticks;

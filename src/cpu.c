@@ -2,20 +2,22 @@
 #include "registers.h"
 #include "memory.h"
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 bool stopped = false;
 
 
 const struct instruction instructions[256] = {
-    {"NOP", nop},
-    {"LD BC nn", ld_bc_nn},
-    {"LD BC A", ld_bc_v_a},
-    {"INC BC", inc_bc},
-    {"INC B", inc_b},
-    {"DEC B", dec_b},
-    {"LD B n", ld_b_n},
-    {"RLC A", rlc_a},
+    {"NOP", nop, 0},
+    {"LD BC nn", ld_bc_nn, 2},
+    {"LD BC A", ld_bc_v_a, 0},
+    {"INC BC", inc_bc, 0},
+    {"INC B", inc_b, 0},
+    {"DEC B", dec_b, 0},
+    {"LD B n", ld_b_n, 1},
+    {"RLC A", rlc_a, 0},
 };
 
 void reset(void) {
@@ -24,26 +26,66 @@ void reset(void) {
     registers.sp = 0xFFFE;
 }
 
+void cycle(void) {
+    unsigned char instruction;
+
+    instruction = readByte(registers.pc++);
+    void *func = instructions[instruction].func;
+
+
+    switch (instructions[instruction].operand_length) {
+        case 0:
+            ((void (*)(void)) func)();
+            break;
+        case 1: {
+            unsigned char operand = readByte(registers.pc++);
+            ((void (*)(unsigned char n)) func)(operand);
+            break;
+        }
+        case 2: {
+            unsigned short operand = readShort(registers.pc);
+            registers.pc += 2;
+            ((void (*)(unsigned short nn)) func)(operand);
+            break;
+        }
+        default:
+            printf("Illegal operand length!");
+            exit(1);
+    }
+}
+
 // 0x00
-void nop(void) {}
+void nop(void) { registers.pc++; }
 
 // 0x01
-void ld_bc_nn(unsigned short nn) { registers.bc = nn; }
+void ld_bc_nn(unsigned short nn) {
+    registers.bc = nn;
+}
 
 // 0x02
-void ld_bc_v_a(void) { writeByte(registers.bc, registers.a); }
+void ld_bc_v_a(void) {
+    writeByte(registers.bc, registers.a);
+}
 
 // 0x03
-void inc_bc(void) { registers.bc++; }
+void inc_bc(void) {
+    registers.bc++;
+}
 
 // 0x04
-void inc_b(void) { registers.b++; }
+void inc_b(void) {
+    registers.b++;
+}
 
 // 0x05
-void dec_b(void) { registers.b--; }
+void dec_b(void) {
+    registers.b--;
+}
 
 // 0x06
-void ld_b_n(unsigned char n) { registers.b = n; }
+void ld_b_n(unsigned char n) {
+    registers.b = n;
+}
 
 // 0x07
 void rlc_a(void) {
