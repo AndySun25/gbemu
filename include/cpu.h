@@ -26,7 +26,7 @@ void inc_b(void);                   // 0x04 - Increment B
 void dec_b(void);                   // 0x05 - Decrement B
 void ld_b_n(unsigned char n);       // 0x06 - Load 8-bit immediate into B
 void rlc_a(void);                   // 0x07 - Rotate A left with carry
-void ld_sp_nn(unsigned short nn);   // 0x08 - Save SP to given address
+void ld_nn_sp(unsigned short nn);   // 0x08 - Save SP to given address
 void add_hl_bc(void);               // 0x09 - Add 16-bit BC to HL
 void ld_a_bc_v(void);               // 0x0A - Load A from address pointed to by BC
 void dec_bc(void);                  // 0x0B - Decrement 16-bit BC
@@ -60,7 +60,7 @@ void inc_h(void);                   // 0x24 - Increment H
 void dec_h(void);                   // 0x25 - Decrement H
 void ld_h_n(unsigned char n);       // 0x26 - Load 8-bit immediate into H
 void daa(void);                     // 0x27 - Adjust A for BCD addition
-void jr_z_n(short n);               // 0x28 - Relative jump by signed immediate if last result was zero
+void jr_z_n(char n);                // 0x28 - Relative jump by signed immediate if last result was zero
 void add_hl_hl(void);               // 0x29 - Add 16-bit HL to HL
 void ldi_a_hl_v(void);              // 0x2A - Load A from address pointed to by HL, then increment HL
 void dec_hl(void);                  // 0x2B - Decrement HL
@@ -240,7 +240,7 @@ void adc_a_n(unsigned char n);      // 0xCE - Add 8-bit immediate and carry to A
 void rst_8(void);                   // 0xCF - Call routine at address 0x0008
 
 void ret_nc(void);                  // 0xD0 - Return if last result caused no carry
-void pop_bc(void);                  // 0xD1 - Pop 16-bit value from stack into DE
+void pop_de(void);                  // 0xD1 - Pop 16-bit value from stack into DE
 void jp_nc_nn(unsigned short nn);   // 0xD2 - Absolute jump to 16-bit location if last result caused no carry
 // Undefined                        // 0xD3
 void call_nc_nn(unsigned short nn); // 0xD4 - Call routine at 16-bit location if last result caused no carry
