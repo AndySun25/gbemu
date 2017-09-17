@@ -10,14 +10,14 @@ bool stopped = false;
 
 
 const struct instruction instructions[256] = {
-    {"NOP", nop, 0},
-    {"LD BC nn", ld_bc_nn, 2},
-    {"LD BC A", ld_bc_v_a, 0},
-    {"INC BC", inc_bc, 0},
-    {"INC B", inc_b, 0},
-    {"DEC B", dec_b, 0},
-    {"LD B n", ld_b_n, 1},
-    {"RLC A", rlc_a, 0},
+    {"NOP", nop, 0, 4},
+    {"LD BC nn", ld_bc_nn, 2, 12},
+    {"LD (BC) A", ld_bc_v_a, 0, 8},
+    {"INC BC", inc_bc, 0, 8},
+    {"INC B", inc_b, 0, 4},
+    {"DEC B", dec_b, 0, 4},
+    {"LD B n", ld_b_n, 1, 8},
+    {"RLC A", rlc_a, 0, 4},
 };
 
 void reset(void) {
@@ -52,6 +52,8 @@ void cycle(void) {
             printf("Illegal operand length!");
             exit(1);
     }
+
+    cycles += instructions[instruction].base_cycles;
 }
 
 // 0x00
@@ -166,11 +168,10 @@ void rr_a(void) { registers.a >>= 1; }
 
 // 0x20
 void jr_nz_n(short n) {
-    if (~flagIsSet(FLAG_ZERO))
+    if (~flagIsSet(FLAG_ZERO)) {
         registers.pc += n;
-    else
-        // TODO Figure out how this shit works
-        ;
+        cycles += 4;
+    }
 }
 
 // 0x21
@@ -196,11 +197,10 @@ void daa(void) { /* TODO Figure out how this shit works */ }
 
 // 0x28
 void jr_z_n (char n) {
-    if (flagIsSet(FLAG_ZERO))
+    if (flagIsSet(FLAG_ZERO)) {
         registers.pc += n;
-    else
-        // TODO Figure out how this shit works
-        ;
+        cycles += 4;
+    }
 }
 
 // 0x29
@@ -228,11 +228,10 @@ void cpl_a(void) { registers.a = ~registers.a; }
 
 // 0x30
 void jr_nc_n(short n) {
-    if (~flagIsSet(FLAG_C))
+    if (~flagIsSet(FLAG_C)) {
         registers.pc += n;
-    else
-        // TODO Figure out how this shit works
-        ;
+        cycles += 4;
+    }
 }
 
 // 0x31
@@ -258,11 +257,10 @@ void scf(void) { flagSet(FLAG_C); }
 
 // 0x38
 void jr_c_n(short n) {
-    if (flagIsSet(FLAG_C))
+    if (flagIsSet(FLAG_C)) {
         registers.pc += n;
-    else
-        // TODO Figure out how this shit works
-        ;
+        cycles += 4;
+    }
 }
 
 // 0x39

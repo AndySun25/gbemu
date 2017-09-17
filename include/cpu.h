@@ -11,9 +11,10 @@ struct instruction {
     char *name;
     void *func;
     unsigned short operand_length;
+    unsigned char base_cycles;
 } extern const instructions[256];
 
-extern unsigned long ticks;
+extern unsigned long cycles;
 
 
 void reset(void);
