@@ -193,7 +193,13 @@ void dec_h(void) { registers.h--; }
 void ld_h_n(unsigned char n) { registers.h = n; }
 
 // 0x27
-void daa(void) { /* TODO Figure out how this shit works */ }
+void daa(void) {
+    if ((registers.a & 0x0F) > 9 || flagIsSet(FLAG_HC))
+        registers.a += 0x06;
+
+    if ((registers.a >> 4) > 9 || flagIsSet(FLAG_C))
+        registers.a += 0x60;
+}
 
 // 0x28
 void jr_z_n (char n) {
