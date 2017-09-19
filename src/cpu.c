@@ -153,7 +153,6 @@ void rlc_a(void) {
 void ld_nn_sp(unsigned short nn) { writeShort(nn, registers.sp); }
 
 // 0x09
-// TODO (on all add functions) handle carry and half-carry flags properly
 void add_hl_bc(void) { addShort(&registers.hl, registers.bc); }
 
 // 0x0A
