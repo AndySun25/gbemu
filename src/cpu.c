@@ -58,29 +58,30 @@ const struct instruction instructions[256] = {
 unsigned long cycles;
 
 
-unsigned short incShort(unsigned short nn) {
-    return ++nn;
-}
-
-
-unsigned short decShort(unsigned short nn) {
-    return --nn;
-}
-
-
-unsigned char incChar(unsigned char n) {
-    flagSet(FLAG_ZERO, ++n == 0);
+unsigned short addShort(unsigned short *t, unsigned short nn) {
+    unsigned long res = *t + nn;
+    flagSet(FLAG_C, res & 0xFFFF0000);
+    flagSet(FLAG_HC, ((*t & 0x0F) + (nn & 0x0F)) > 0x0F);
     flagSet(FLAG_SUB, 0);
-    // TODO Handle half carry
-    return n;
+    *t = (unsigned short) res;
 }
 
 
-unsigned char decChar(unsigned char n) {
-    flagSet(FLAG_ZERO, --n==0);
+unsigned char addChar(unsigned char *t, unsigned char n) {
+    unsigned int res = *t + n;
+    flagSet(FLAG_HC, ((*t & 0x0F) + (n & 0x0F)) > 0x0F);
+    flagSet(FLAG_ZERO, ~res);
+    flagSet(FLAG_SUB, 0);
+    *t = (unsigned char) res;
+}
+
+
+unsigned char subChar(unsigned char *t, unsigned char n) {
+    unsigned int res = *t + n;
+    flagSet(FLAG_HC, (*t & 0x0F) < (n & 0x0F));
+    flagSet(FLAG_ZERO, ~res);
     flagSet(FLAG_SUB, 1);
-    // TODO Handle half carry
-    return n;
+    *t = (unsigned char) res;
 }
 
 
@@ -131,13 +132,13 @@ void ld_bc_nn(unsigned short nn) { registers.bc = nn; }
 void ld_bc_v_a(void) { writeByte(registers.bc, registers.a); }
 
 // 0x03
-void inc_bc(void) { registers.bc++; }
+void inc_bc(void) { addShort(&registers.bc, 1); }
 
 // 0x04
-void inc_b(void) { registers.b++; }
+void inc_b(void) { addChar(&registers.b, 1); }
 
 // 0x05
-void dec_b(void) { registers.b--; }
+void dec_b(void) { subChar(&registers.b, 1); }
 
 // 0x06
 void ld_b_n(unsigned char n) { registers.b = n; }
@@ -153,7 +154,7 @@ void ld_nn_sp(unsigned short nn) { writeShort(nn, registers.sp); }
 
 // 0x09
 // TODO (on all add functions) handle carry and half-carry flags properly
-void add_hl_bc(void) { registers.hl += registers.bc; }
+void add_hl_bc(void) { addShort(&registers.hl, registers.bc); }
 
 // 0x0A
 void ld_a_bc_v(void) { registers.a = readByte(registers.bc); }
@@ -162,10 +163,10 @@ void ld_a_bc_v(void) { registers.a = readByte(registers.bc); }
 void dec_bc(void) { registers.bc--; }
 
 // 0x0C
-void inc_c(void) { registers.c++; }
+void inc_c(void) { addChar(&registers.c, 1); }
 
 // 0x0D
-void dec_c(void) { registers.c--; }
+void dec_c(void) { subChar(&registers.c, 1); }
 
 // 0x0E
 void ld_c_n(unsigned char n) { registers.c = n; }
@@ -186,13 +187,13 @@ void ld_de_nn(unsigned short nn) { registers.de = nn; }
 void ld_de_v_a(void) { writeByte(registers.de, registers.a); }
 
 // 0x13
-void inc_de(void) { registers.de++; }
+void inc_de(void) { addShort(&registers.de, 1); }
 
 // 0x14
-void inc_d(void) { registers.d++; }
+void inc_d(void) { addChar(&registers.d, 1); }
 
 // 0x15
-void dec_d(void) { registers.d--; }
+void dec_d(void) { subChar(&registers.d, 1); }
 
 // 0x16
 void ld_d_n(unsigned char n) { registers.d = n; }
@@ -204,7 +205,7 @@ void rl_a(void) { registers.a <<= 1; }
 void jr_n(short n) { registers.pc += n; }
 
 // 0x19
-void add_hl_de(void) { registers.hl += registers.de; }
+void add_hl_de(void) { addShort(&registers.hl, registers.de); }
 
 // 0x1A
 void ld_a_de_v(void) { registers.a = readByte(registers.de); }
@@ -213,10 +214,10 @@ void ld_a_de_v(void) { registers.a = readByte(registers.de); }
 void dec_de(void) { registers.de--; }
 
 // 0x1C
-void inc_e(void) { registers.de++; }
+void inc_e(void) { addChar(&registers.e, 1); }
 
 // 0x1D
-void dec_e(void) { registers.e--; }
+void dec_e(void) { subChar(&registers.e, 1); }
 
 // 0x1E
 void ld_e_n(unsigned char n) { registers.e = n; }
@@ -239,13 +240,13 @@ void ld_hl_nn(unsigned short nn) { registers.hl = nn; }
 void ldi_hl_v_a(void) { writeByte(registers.hl++, registers.a); }
 
 // 0x23
-void inc_hl(void) { registers.hl++; }
+void inc_hl(void) { addShort(&registers.hl, 1); }
 
 // 0x24
-void inc_h(void) { registers.h++; }
+void inc_h(void) { addChar(&registers.h, 1); }
 
 // 0x25
-void dec_h(void) { registers.h--; }
+void dec_h(void) { subChar(&registers.h, 1); }
 
 // 0x26
 void ld_h_n(unsigned char n) { registers.h = n; }
@@ -279,10 +280,10 @@ void ldi_a_hl_v(void) {
 void dec_hl(void) { registers.hl--; }
 
 // 0x2C
-void inc_l(void) { registers.l++; }
+void inc_l(void) { addChar(&registers.l, 1); }
 
 // 0x2D
-void dec_l(void) { registers.l--; }
+void dec_l(void) { subChar(&registers.l, 1); }
 
 // 0x2E
 void ld_l_n(unsigned char n) { registers.l = n; }
@@ -339,10 +340,10 @@ void ldd_a_hl_v(void) {
 void dec_sp(void) { registers.sp--; }
 
 // 0x3C
-void inc_a(void) { registers.a++; }
+void inc_a(void) { addChar(&registers.a, 1); }
 
 // 0x3D
-void dec_a(void) { registers.a--; }
+void dec_a(void) { subChar(&registers.a, 1); }
 
 // 0x3E
 void ld_a_n(unsigned char n) { registers.a = n; }
