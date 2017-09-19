@@ -4,8 +4,7 @@
 #define FLAG_C      1 << 4          // Carry
 
 #define flagIsSet(flag) (registers.flags & (flag))
-#define flagSet(flag) (registers.flags |= (flag))
-#define flagUnset(flag) (registers.flags &= ~(flag))
+#define flagSet(flag, value) (registers.flags = (value) ? (registers.flags | (flag)) : (registers.flags & ~(flag)))
 
 struct instruction {
     char *name;

@@ -57,6 +57,33 @@ const struct instruction instructions[256] = {
 
 unsigned long cycles;
 
+
+unsigned short incShort(unsigned short nn) {
+    return ++nn;
+}
+
+
+unsigned short decShort(unsigned short nn) {
+    return --nn;
+}
+
+
+unsigned char incChar(unsigned char n) {
+    flagSet(FLAG_ZERO, ++n == 0);
+    flagSet(FLAG_SUB, 0);
+    // TODO Handle half carry
+    return n;
+}
+
+
+unsigned char decChar(unsigned char n) {
+    flagSet(FLAG_ZERO, --n==0);
+    flagSet(FLAG_SUB, 1);
+    // TODO Handle half carry
+    return n;
+}
+
+
 void reset(void) {
     // Reset registers
     registers.pc = 0x0100;
@@ -117,11 +144,7 @@ void ld_b_n(unsigned char n) { registers.b = n; }
 
 // 0x07
 void rlc_a(void) {
-    if (registers.a >> 7)
-        flagSet(FLAG_C);
-    else
-        flagUnset(FLAG_C);
-
+    flagSet(FLAG_C, registers.a >> 7);
     registers.a <<= 1;
 }
 
@@ -149,11 +172,7 @@ void ld_c_n(unsigned char n) { registers.c = n; }
 
 // 0x0F
 void rrc_a(void) {
-    if (registers.a & 0x01)
-        flagSet(FLAG_C);
-    else
-        flagUnset(FLAG_C);
-
+    flagSet(FLAG_C, registers.a & 0x01);
     registers.a >>= 1;
 }
 
@@ -298,7 +317,7 @@ void dec_hl_v(void) { writeByte(registers.hl, readByte(registers.hl) - (unsigned
 void ld_hl_v_n(unsigned char n) { writeByte(registers.hl, n); }
 
 // 0x37
-void scf(void) { flagSet(FLAG_C); }
+void scf(void) { flagSet(FLAG_C, 1); }
 
 // 0x38
 void jr_c_n(short n) {
@@ -329,7 +348,7 @@ void dec_a(void) { registers.a--; }
 void ld_a_n(unsigned char n) { registers.a = n; }
 
 // 0x3F
-void ccf(void) { flagUnset(FLAG_C); }
+void ccf(void) { flagSet(FLAG_C, 0); }
 
 // 0x41
 void ld_b_c(void) { registers.b = registers.c; }
