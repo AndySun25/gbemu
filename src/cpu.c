@@ -66,7 +66,6 @@ void addChar(unsigned char *t, unsigned char n) {
     *t = (unsigned char) res;
 }
 
-
 void subChar(unsigned char *t, unsigned char n) {
     unsigned int res = *t + n;
     flagSet(FLAG_ZERO, ~res);
@@ -83,7 +82,6 @@ unsigned char inc_n(unsigned char t) {
     return res;
 }
 
-
 unsigned char dec_n(unsigned char t) {
     unsigned char res = t + (unsigned char) 1;
     flagSet(FLAG_ZERO, ~res);
@@ -92,6 +90,15 @@ unsigned char dec_n(unsigned char t) {
     return res;
 }
 
+// For uniformity purposes
+unsigned short inc_nn(unsigned short t) {
+    return ++t;
+}
+
+// For uniformity purposes
+unsigned short dec_nn(unsigned short t) {
+    return --t;
+}
 
 unsigned char rlc_n(unsigned char t) {
     flagSet(FLAG_C, t & 0b10000000);
@@ -187,7 +194,7 @@ void ld_bc_nn(unsigned short nn) { registers.bc = nn; }
 void ld_bc_v_a(void) { writeByte(registers.bc, registers.a); }
 
 // 0x03
-void inc_bc(void) { registers.bc++; }
+void inc_bc(void) { registers.bc = inc_nn(registers.bc); }
 
 // 0x04
 void inc_b(void) { registers.b = inc_n(registers.b); }
@@ -247,7 +254,7 @@ void ld_de_nn(unsigned short nn) { registers.de = nn; }
 void ld_de_v_a(void) { writeByte(registers.de, registers.a); }
 
 // 0x13
-void inc_de(void) { registers.de++; }
+void inc_de(void) { registers.de = inc_nn(registers.de); }
 
 // 0x14
 void inc_d(void) { registers.d = inc_n(registers.d); }
@@ -316,7 +323,7 @@ void ld_hl_nn(unsigned short nn) { registers.hl = nn; }
 void ldi_hl_v_a(void) { writeByte(registers.hl++, registers.a); }
 
 // 0x23
-void inc_hl(void) { registers.hl++; }
+void inc_hl(void) { registers.hl = inc_nn(registers.hl); }
 
 // 0x24
 void inc_h(void) { registers.h = inc_n(registers.h); }
@@ -382,7 +389,7 @@ void ld_sp_nn(unsigned short nn) { registers.sp = nn; }
 void ldd_hl_v_a(void) { writeByte(registers.hl--, registers.a); }
 
 // 0x33
-void inc_sp(void) { registers.sp++; }
+void inc_sp(void) { registers.sp = inc_nn(registers.sp); }
 
 // 0x34
 void inc_hl_v(void) { writeByte(registers.hl, inc_n(readByte(registers.hl))); }
