@@ -84,21 +84,21 @@ void subChar(unsigned char *t, unsigned char n) {
     *t = (unsigned char) res;
 }
 
-void inc_n(unsigned char *t) {
-    unsigned char res = *t + 1;
+unsigned char inc_n(unsigned char t) {
+    unsigned char res = t + (unsigned char) 1;
     flagSet(FLAG_ZERO, ~res);
     flagSet(FLAG_SUB, 0);
-    flagSet(FLAG_HC, (*t & 0x0F) + 1 > 0x0F);
-    (*t)++;
+    flagSet(FLAG_HC, (t & 0x0F) + 1 > 0x0F);
+    return res;
 }
 
 
-void dec_n(unsigned char *t) {
-    unsigned char res = *t + 1;
+unsigned char dec_n(unsigned char t) {
+    unsigned char res = t + (unsigned char) 1;
     flagSet(FLAG_ZERO, ~res);
     flagSet(FLAG_SUB, 1);
-    flagSet(FLAG_HC, (*t & 0x0F) < 1);
-    (*t)--;
+    flagSet(FLAG_HC, (t & 0x0F) < 1);
+    return res;
 }
 
 
@@ -152,10 +152,10 @@ void ld_bc_v_a(void) { writeByte(registers.bc, registers.a); }
 void inc_bc(void) { registers.bc++; }
 
 // 0x04
-void inc_b(void) { inc_n(&registers.b); }
+void inc_b(void) { registers.b = inc_n(registers.b); }
 
 // 0x05
-void dec_b(void) { dec_n(&registers.b); }
+void dec_b(void) { registers.b = dec_n(registers.b); }
 
 // 0x06
 void ld_b_n(unsigned char n) { registers.b = n; }
@@ -182,10 +182,10 @@ void ld_a_bc_v(void) { registers.a = readByte(registers.bc); }
 void dec_bc(void) { registers.bc--; }
 
 // 0x0C
-void inc_c(void) { inc_n(&registers.c); }
+void inc_c(void) { registers.c = inc_n(registers.c); }
 
 // 0x0D
-void dec_c(void) { dec_n(&registers.c); }
+void dec_c(void) { registers.c = dec_n(registers.c); }
 
 // 0x0E
 void ld_c_n(unsigned char n) { registers.c = n; }
@@ -212,10 +212,10 @@ void ld_de_v_a(void) { writeByte(registers.de, registers.a); }
 void inc_de(void) { registers.de++; }
 
 // 0x14
-void inc_d(void) { inc_n(&registers.d); }
+void inc_d(void) { registers.d = inc_n(registers.d); }
 
 // 0x15
-void dec_d(void) { dec_n(&registers.d); }
+void dec_d(void) { registers.d = dec_n(registers.d); }
 
 // 0x16
 void ld_d_n(unsigned char n) { registers.d = n; }
@@ -244,10 +244,10 @@ void ld_a_de_v(void) { registers.a = readByte(registers.de); }
 void dec_de(void) { registers.de--; }
 
 // 0x1C
-void inc_e(void) { inc_n(&registers.e); }
+void inc_e(void) { registers.e = inc_n(registers.e); }
 
 // 0x1D
-void dec_e(void) { dec_n(&registers.e); }
+void dec_e(void) { registers.e = dec_n(registers.e); }
 
 // 0x1E
 void ld_e_n(unsigned char n) { registers.e = n; }
@@ -281,10 +281,10 @@ void ldi_hl_v_a(void) { writeByte(registers.hl++, registers.a); }
 void inc_hl(void) { registers.hl++; }
 
 // 0x24
-void inc_h(void) { inc_n(&registers.h); }
+void inc_h(void) { registers.h = inc_n(registers.h); }
 
 // 0x25
-void dec_h(void) { dec_n(&registers.h); }
+void dec_h(void) { registers.h = dec_n(registers.h); }
 
 // 0x26
 void ld_h_n(unsigned char n) { registers.h = n; }
@@ -318,10 +318,10 @@ void ldi_a_hl_v(void) {
 void dec_hl(void) { registers.hl--; }
 
 // 0x2C
-void inc_l(void) { inc_n(&registers.l); }
+void inc_l(void) { registers.l = inc_n(registers.l); }
 
 // 0x2D
-void dec_l(void) { dec_n(&registers.l); }
+void dec_l(void) { registers.l = dec_n(registers.l); }
 
 // 0x2E
 void ld_l_n(unsigned char n) { registers.l = n; }
@@ -347,10 +347,10 @@ void ldd_hl_v_a(void) { writeByte(registers.hl--, registers.a); }
 void inc_sp(void) { registers.sp++; }
 
 // 0x34
-void inc_hl_v(void) { writeByte(registers.hl, readByte(registers.hl) + (unsigned char) 1); }
+void inc_hl_v(void) { writeByte(registers.hl, inc_n(readByte(registers.hl))); }
 
 // 0x35
-void dec_hl_v(void) { writeByte(registers.hl, readByte(registers.hl) - (unsigned char) 1); }
+void dec_hl_v(void) { writeByte(registers.hl, dec_n(readByte(registers.hl))); }
 
 // 0x36
 void ld_hl_v_n(unsigned char n) { writeByte(registers.hl, n); }
@@ -378,10 +378,10 @@ void ldd_a_hl_v(void) {
 void dec_sp(void) { registers.sp--; }
 
 // 0x3C
-void inc_a(void) { inc_n(&registers.a); }
+void inc_a(void) { registers.a = inc_n(registers.a); }
 
 // 0x3D
-void dec_a(void) { dec_n(&registers.a); }
+void dec_a(void) { registers.a = dec_n(registers.a); }
 
 // 0x3E
 void ld_a_n(unsigned char n) { registers.a = n; }
