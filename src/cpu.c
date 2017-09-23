@@ -58,35 +58,37 @@ const struct instruction instructions[256] = {
 unsigned long cycles;
 
 
-void addChar(unsigned char *t, unsigned char n) {
-    unsigned int res = *t + n;
-    flagSet(FLAG_ZERO, ~res);
-    flagSet(FLAG_SUB, 0);
-    flagSet(FLAG_HC, ((*t & 0x0F) + (n & 0x0F)) > 0x0F);
-    *t = (unsigned char) res;
+unsigned char add_n_n(unsigned char t, unsigned char n) {
+    unsigned int res = t + n;
+    flagSet(FLAG_Z, ~res);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, ((t & 0x0F) + (n & 0x0F)) > 0x0F);
+    flagSet(FLAG_C, res >> 8);
+    return (unsigned char) res;
 }
 
-void subChar(unsigned char *t, unsigned char n) {
-    unsigned int res = *t + n;
-    flagSet(FLAG_ZERO, ~res);
-    flagSet(FLAG_SUB, 1);
-    flagSet(FLAG_HC, (*t & 0x0F) < (n & 0x0F));
-    *t = (unsigned char) res;
+unsigned char sub_n(unsigned char n) {
+    unsigned char res = registers.a + n;
+    flagSet(FLAG_Z, ~res);
+    flagSet(FLAG_N, 1);
+    flagSet(FLAG_H, (registers.a & 0x0F) < (n & 0x0F));
+    flagSet(FLAG_C, n > registers.a);
+    return res;
 }
 
 unsigned char inc_n(unsigned char t) {
     unsigned char res = t + (unsigned char) 1;
-    flagSet(FLAG_ZERO, ~res);
-    flagSet(FLAG_SUB, 0);
-    flagSet(FLAG_HC, (t & 0x0F) + 1 > 0x0F);
+    flagSet(FLAG_Z, ~res);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, (t & 0x0F) + 1 > 0x0F);
     return res;
 }
 
 unsigned char dec_n(unsigned char t) {
     unsigned char res = t + (unsigned char) 1;
-    flagSet(FLAG_ZERO, ~res);
-    flagSet(FLAG_SUB, 1);
-    flagSet(FLAG_HC, (t & 0x0F) < 1);
+    flagSet(FLAG_Z, ~res);
+    flagSet(FLAG_N, 1);
+    flagSet(FLAG_H, (t & 0x0F) < 1);
     return res;
 }
 
@@ -103,9 +105,9 @@ unsigned short dec_nn(unsigned short t) {
 unsigned char rlc_n(unsigned char t) {
     flagSet(FLAG_C, t & 0b10000000);
     t <<= 1;
-    flagSet(FLAG_ZERO, t == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
     return t;
 }
 
@@ -114,18 +116,18 @@ unsigned char rl_n(unsigned char t) {
     flagSet(FLAG_C, t & 0b10000000);
     t <<= 1;
     t |= carry;
-    flagSet(FLAG_ZERO, t == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
     return t;
 }
 
 unsigned char rrc_n(unsigned char t) {
     flagSet(FLAG_C, t & 0x01);
     t >>= 1;
-    flagSet(FLAG_ZERO, t == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
 }
 
 unsigned char rr_n(unsigned char t) {
@@ -133,16 +135,16 @@ unsigned char rr_n(unsigned char t) {
     flagSet(FLAG_C, t & 0x01);
     t >>= 1;
     t |= carry;
-    flagSet(FLAG_ZERO, t == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
     return t;
 }
 
 unsigned short add_nn_nn(unsigned short t, unsigned short nn) {
     unsigned long res = t + nn;
-    flagSet(FLAG_SUB, 0);
-    flagSet(FLAG_HC, ((t & 0xFFF) + (nn & 0xFFF)) > 0xFFF);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, ((t & 0xFFF) + (nn & 0xFFF)) > 0xFFF);
     flagSet(FLAG_C, res & 0xFFFF0000);
     return (unsigned short) res;
 }
@@ -209,9 +211,9 @@ void ld_b_n(unsigned char n) { registers.b = n; }
 void rlc_a(void) {
     flagSet(FLAG_C, registers.a & 0b10000000);
     registers.a <<= 1;
-    flagSet(FLAG_ZERO, registers.a == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, registers.a == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
 }
 
 // 0x08
@@ -239,9 +241,9 @@ void ld_c_n(unsigned char n) { registers.c = n; }
 void rrc_a(void) {
     flagSet(FLAG_C, registers.a & 0x01);
     registers.a >>= 1;
-    flagSet(FLAG_ZERO, registers.a == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, registers.a == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
 }
 
 // 0x10
@@ -271,9 +273,9 @@ void rl_a(void) {
     flagSet(FLAG_C, registers.a & 0b10000000);
     registers.a <<= 1;
     registers.a |= carry;
-    flagSet(FLAG_ZERO, registers.a == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, registers.a == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
 }
 
 // 0x18
@@ -303,14 +305,14 @@ void rr_a(void) {
     flagSet(FLAG_C, registers.a & 0x01);
     registers.a >>= 1;
     registers.a |= carry;
-    flagSet(FLAG_ZERO, registers.a == 0);
-    flagSet(FLAG_HC, 0);
-    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_Z, registers.a == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_N, 0);
 }
 
 // 0x20
 void jr_nz_n(short n) {
-    if (~flagIsSet(FLAG_ZERO)) {
+    if (~flagIsSet(FLAG_Z)) {
         registers.pc += n;
         cycles += 4;
     }
@@ -336,7 +338,7 @@ void ld_h_n(unsigned char n) { registers.h = n; }
 
 // 0x27
 void daa(void) {
-    if ((registers.a & 0x0F) > 9 || flagIsSet(FLAG_HC))
+    if ((registers.a & 0x0F) > 9 || flagIsSet(FLAG_H))
         registers.a += 0x06;
 
     if ((registers.a >> 4) > 9 || flagIsSet(FLAG_C))
@@ -345,7 +347,7 @@ void daa(void) {
 
 // 0x28
 void jr_z_n (char n) {
-    if (flagIsSet(FLAG_ZERO)) {
+    if (flagIsSet(FLAG_Z)) {
         registers.pc += n;
         cycles += 4;
     }
