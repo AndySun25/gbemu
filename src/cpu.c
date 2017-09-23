@@ -52,6 +52,16 @@ const struct instruction instructions[256] = {
     {"DAA", daa, 0, 4},
     {"JR Z n", jr_z_n, 1, 8},       // 8 cycles min, 12 if jumping (handled in func)
     {"ADD HL HL", add_hl_hl, 0, 8},
+    {"LD A (HL+)", ldi_a_hl_v, 0, 8},
+    {"DEC HL", dec_hl, 0, 8},
+    {"INC L", inc_l, 0, 4},
+    {"DEC L", dec_l, 0, 4},
+    {"LD L n", ld_l_n, 1, 8},
+    {"CPL A", cpl_a, 0, 4},
+    {"JR NC n", jr_nc_n, 1, 8},     // 8 cycles min, 12 if jumping (handled in func)
+    {"LD SP nn", ld_sp_nn, 2, 12},
+    {"LDD (HL) A", ldd_hl_v_a, 0, 8},
+    {"INC SP", inc_sp, 0, 8},
     // Template: {"", , , },
 };
 
@@ -338,22 +348,19 @@ void ld_h_n(unsigned char n) { registers.h = n; }
 
 // 0x27
 void daa(void) {
-    int carry = 0;
-    if ((registers.a & 0x0F) > 9 || flagIsSet(FLAG_H)) {
-        if (((unsigned int) registers.a + 0x06) > 0xFF)
-            carry = 1;
-        registers.a += 0x06;
+    unsigned int res = registers.a;
+    if ((res & 0x0F) > 9 || flagIsSet(FLAG_H)) {
+        res += 0x06;
     }
 
-    if ((registers.a >> 4) > 9 || flagIsSet(FLAG_C)) {
-        if (carry | ((unsigned int) registers.a + 0x60) > 0xFF)
-            carry = 1;
-        registers.a += 0x60;
+    if ((res >> 4) > 9 || flagIsSet(FLAG_C)) {
+        res += 0x60;
     }
 
-    flagSet(FLAG_Z, registers.a == 0);
+    flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_H, 0);
-    flagSet(FLAG_C, carry);
+    flagSet(FLAG_C, res > 0xFF);
+    registers.a = (unsigned char) res;
 }
 
 // 0x28
