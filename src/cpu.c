@@ -58,15 +58,6 @@ const struct instruction instructions[256] = {
 unsigned long cycles;
 
 
-void addShort(unsigned short *t, unsigned short nn) {
-    unsigned long res = *t + nn;
-    flagSet(FLAG_SUB, 0);
-    flagSet(FLAG_HC, ((*t & 0x0F) + (nn & 0x0F)) > 0x0F);
-    flagSet(FLAG_C, res & 0xFFFF0000);
-    *t = (unsigned short) res;
-}
-
-
 void addChar(unsigned char *t, unsigned char n) {
     unsigned int res = *t + n;
     flagSet(FLAG_ZERO, ~res);
@@ -141,6 +132,13 @@ unsigned char rr_n(unsigned char t) {
     return t;
 }
 
+unsigned short add_nn_nn(unsigned short t, unsigned short nn) {
+    unsigned long res = t + nn;
+    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_HC, ((t & 0xFFF) + (nn & 0xFFF)) > 0xFFF);
+    flagSet(FLAG_C, res & 0xFFFF0000);
+    return (unsigned short) res;
+}
 
 void reset(void) {
     // Reset registers
@@ -213,7 +211,7 @@ void rlc_a(void) {
 void ld_nn_sp(unsigned short nn) { writeShort(nn, registers.sp); }
 
 // 0x09
-void add_hl_bc(void) { addShort(&registers.hl, registers.bc); }
+void add_hl_bc(void) { registers.hl = add_nn_nn(registers.hl, registers.bc); }
 
 // 0x0A
 void ld_a_bc_v(void) { registers.a = readByte(registers.bc); }
@@ -275,7 +273,7 @@ void rl_a(void) {
 void jr_n(short n) { registers.pc += n; }
 
 // 0x19
-void add_hl_de(void) { addShort(&registers.hl, registers.de); }
+void add_hl_de(void) { registers.hl = add_nn_nn(registers.hl, registers.de); }
 
 // 0x1A
 void ld_a_de_v(void) { registers.a = readByte(registers.de); }
