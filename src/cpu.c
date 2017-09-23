@@ -145,8 +145,11 @@ void ld_b_n(unsigned char n) { registers.b = n; }
 
 // 0x07
 void rlc_a(void) {
-    flagSet(FLAG_C, registers.a >> 7);
+    flagSet(FLAG_C, registers.a & 0b10000000);
     registers.a <<= 1;
+    flagSet(FLAG_ZERO, registers.a == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
 }
 
 // 0x08
@@ -174,6 +177,9 @@ void ld_c_n(unsigned char n) { registers.c = n; }
 void rrc_a(void) {
     flagSet(FLAG_C, registers.a & 0x01);
     registers.a >>= 1;
+    flagSet(FLAG_ZERO, registers.a == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
 }
 
 // 0x10
@@ -198,7 +204,15 @@ void dec_d(void) { subChar(&registers.d, 1); }
 void ld_d_n(unsigned char n) { registers.d = n; }
 
 // 0x17
-void rl_a(void) { registers.a <<= 1; }
+void rl_a(void) {
+    unsigned char carry = (unsigned char) flagIsSet(FLAG_C);
+    flagSet(FLAG_C, registers.a & 0b10000000);
+    registers.a <<= 1;
+    registers.a |= carry;
+    flagSet(FLAG_ZERO, registers.a == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
+}
 
 // 0x18
 void jr_n(short n) { registers.pc += n; }
@@ -222,7 +236,15 @@ void dec_e(void) { subChar(&registers.e, 1); }
 void ld_e_n(unsigned char n) { registers.e = n; }
 
 // 0x1F
-void rr_a(void) { registers.a >>= 1; }
+void rr_a(void) {
+    unsigned char carry = ((unsigned char) flagIsSet(FLAG_C)) << 7;
+    flagSet(FLAG_C, registers.a & 0x01);
+    registers.a >>= 1;
+    registers.a |= carry;
+    flagSet(FLAG_ZERO, registers.a == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
+}
 
 // 0x20
 void jr_nz_n(short n) {

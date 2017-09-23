@@ -43,7 +43,7 @@ void inc_de(void);                  // 0x13 - Increment 16-bit DE
 void inc_d(void);                   // 0x14 - Increment D
 void dec_d(void);                   // 0x15 - Decrement D
 void ld_d_n(unsigned char n);       // 0x16 - Load 8-bit immediate into D
-void rl_a(void);                    // 0x17 - Rotate A left without carry
+void rl_a(void);                    // 0x17 - Rotate A left through carry
 void jr_n(short n);                 // 0x18 - Relative jump by signed immediate
 void add_hl_de(void);               // 0x19 - Add 16-bit DE to HL
 void ld_a_de_v(void);               // 0x1A - Load A from address pointed to by DE
@@ -51,7 +51,7 @@ void dec_de(void);                  // 0x1B - Decrement 16-bit DE
 void inc_e(void);                   // 0x1C - Increment E
 void dec_e(void);                   // 0x1D - Decrement E
 void ld_e_n(unsigned char n);       // 0x1E - Load 8-bit immediate into E
-void rr_a(void);                    // 0x1F - Rotate A right without carry
+void rr_a(void);                    // 0x1F - Rotate A right through carry
 
 void jr_nz_n(short n);              // 0x20 - Relative jump by signed immediate if last result was not zero
 void ld_hl_nn(unsigned short nn);   // 0x21 - Load 16 bit immediate into HL
