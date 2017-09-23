@@ -58,30 +58,47 @@ const struct instruction instructions[256] = {
 unsigned long cycles;
 
 
-unsigned short addShort(unsigned short *t, unsigned short nn) {
+void addShort(unsigned short *t, unsigned short nn) {
     unsigned long res = *t + nn;
-    flagSet(FLAG_C, res & 0xFFFF0000);
-    flagSet(FLAG_HC, ((*t & 0x0F) + (nn & 0x0F)) > 0x0F);
     flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_HC, ((*t & 0x0F) + (nn & 0x0F)) > 0x0F);
+    flagSet(FLAG_C, res & 0xFFFF0000);
     *t = (unsigned short) res;
 }
 
 
-unsigned char addChar(unsigned char *t, unsigned char n) {
+void addChar(unsigned char *t, unsigned char n) {
     unsigned int res = *t + n;
-    flagSet(FLAG_HC, ((*t & 0x0F) + (n & 0x0F)) > 0x0F);
     flagSet(FLAG_ZERO, ~res);
     flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_HC, ((*t & 0x0F) + (n & 0x0F)) > 0x0F);
     *t = (unsigned char) res;
 }
 
 
-unsigned char subChar(unsigned char *t, unsigned char n) {
+void subChar(unsigned char *t, unsigned char n) {
     unsigned int res = *t + n;
-    flagSet(FLAG_HC, (*t & 0x0F) < (n & 0x0F));
     flagSet(FLAG_ZERO, ~res);
     flagSet(FLAG_SUB, 1);
+    flagSet(FLAG_HC, (*t & 0x0F) < (n & 0x0F));
     *t = (unsigned char) res;
+}
+
+void inc_n(unsigned char *t) {
+    unsigned char res = *t + 1;
+    flagSet(FLAG_ZERO, ~res);
+    flagSet(FLAG_SUB, 0);
+    flagSet(FLAG_HC, (*t & 0x0F) + 1 > 0x0F);
+    (*t)++;
+}
+
+
+void dec_n(unsigned char *t) {
+    unsigned char res = *t + 1;
+    flagSet(FLAG_ZERO, ~res);
+    flagSet(FLAG_SUB, 1);
+    flagSet(FLAG_HC, (*t & 0x0F) < 1);
+    (*t)--;
 }
 
 
@@ -132,13 +149,13 @@ void ld_bc_nn(unsigned short nn) { registers.bc = nn; }
 void ld_bc_v_a(void) { writeByte(registers.bc, registers.a); }
 
 // 0x03
-void inc_bc(void) { addShort(&registers.bc, 1); }
+void inc_bc(void) { registers.bc++; }
 
 // 0x04
-void inc_b(void) { addChar(&registers.b, 1); }
+void inc_b(void) { inc_n(&registers.b); }
 
 // 0x05
-void dec_b(void) { subChar(&registers.b, 1); }
+void dec_b(void) { dec_n(&registers.b); }
 
 // 0x06
 void ld_b_n(unsigned char n) { registers.b = n; }
@@ -165,10 +182,10 @@ void ld_a_bc_v(void) { registers.a = readByte(registers.bc); }
 void dec_bc(void) { registers.bc--; }
 
 // 0x0C
-void inc_c(void) { addChar(&registers.c, 1); }
+void inc_c(void) { inc_n(&registers.c); }
 
 // 0x0D
-void dec_c(void) { subChar(&registers.c, 1); }
+void dec_c(void) { dec_n(&registers.c); }
 
 // 0x0E
 void ld_c_n(unsigned char n) { registers.c = n; }
@@ -192,13 +209,13 @@ void ld_de_nn(unsigned short nn) { registers.de = nn; }
 void ld_de_v_a(void) { writeByte(registers.de, registers.a); }
 
 // 0x13
-void inc_de(void) { addShort(&registers.de, 1); }
+void inc_de(void) { registers.de++; }
 
 // 0x14
-void inc_d(void) { addChar(&registers.d, 1); }
+void inc_d(void) { inc_n(&registers.d); }
 
 // 0x15
-void dec_d(void) { subChar(&registers.d, 1); }
+void dec_d(void) { dec_n(&registers.d); }
 
 // 0x16
 void ld_d_n(unsigned char n) { registers.d = n; }
@@ -227,10 +244,10 @@ void ld_a_de_v(void) { registers.a = readByte(registers.de); }
 void dec_de(void) { registers.de--; }
 
 // 0x1C
-void inc_e(void) { addChar(&registers.e, 1); }
+void inc_e(void) { inc_n(&registers.e); }
 
 // 0x1D
-void dec_e(void) { subChar(&registers.e, 1); }
+void dec_e(void) { dec_n(&registers.e); }
 
 // 0x1E
 void ld_e_n(unsigned char n) { registers.e = n; }
@@ -261,13 +278,13 @@ void ld_hl_nn(unsigned short nn) { registers.hl = nn; }
 void ldi_hl_v_a(void) { writeByte(registers.hl++, registers.a); }
 
 // 0x23
-void inc_hl(void) { addShort(&registers.hl, 1); }
+void inc_hl(void) { registers.hl++; }
 
 // 0x24
-void inc_h(void) { addChar(&registers.h, 1); }
+void inc_h(void) { inc_n(&registers.h); }
 
 // 0x25
-void dec_h(void) { subChar(&registers.h, 1); }
+void dec_h(void) { dec_n(&registers.h); }
 
 // 0x26
 void ld_h_n(unsigned char n) { registers.h = n; }
@@ -301,10 +318,10 @@ void ldi_a_hl_v(void) {
 void dec_hl(void) { registers.hl--; }
 
 // 0x2C
-void inc_l(void) { addChar(&registers.l, 1); }
+void inc_l(void) { inc_n(&registers.l); }
 
 // 0x2D
-void dec_l(void) { subChar(&registers.l, 1); }
+void dec_l(void) { dec_n(&registers.l); }
 
 // 0x2E
 void ld_l_n(unsigned char n) { registers.l = n; }
@@ -361,10 +378,10 @@ void ldd_a_hl_v(void) {
 void dec_sp(void) { registers.sp--; }
 
 // 0x3C
-void inc_a(void) { addChar(&registers.a, 1); }
+void inc_a(void) { inc_n(&registers.a); }
 
 // 0x3D
-void dec_a(void) { subChar(&registers.a, 1); }
+void dec_a(void) { dec_n(&registers.a); }
 
 // 0x3E
 void ld_a_n(unsigned char n) { registers.a = n; }
