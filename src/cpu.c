@@ -102,6 +102,46 @@ unsigned char dec_n(unsigned char t) {
 }
 
 
+unsigned char rlc_n(unsigned char t) {
+    flagSet(FLAG_C, t & 0b10000000);
+    t <<= 1;
+    flagSet(FLAG_ZERO, t == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
+    return t;
+}
+
+unsigned char rl_n(unsigned char t) {
+    unsigned char carry = (unsigned char) flagIsSet(FLAG_C);
+    flagSet(FLAG_C, t & 0b10000000);
+    t <<= 1;
+    t |= carry;
+    flagSet(FLAG_ZERO, t == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
+    return t;
+}
+
+unsigned char rrc_n(unsigned char t) {
+    flagSet(FLAG_C, t & 0x01);
+    t >>= 1;
+    flagSet(FLAG_ZERO, t == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
+}
+
+unsigned char rr_n(unsigned char t) {
+    unsigned char carry = ((unsigned char) flagIsSet(FLAG_C)) << 7;
+    flagSet(FLAG_C, t & 0x01);
+    t >>= 1;
+    t |= carry;
+    flagSet(FLAG_ZERO, t == 0);
+    flagSet(FLAG_HC, 0);
+    flagSet(FLAG_SUB, 0);
+    return t;
+}
+
+
 void reset(void) {
     // Reset registers
     registers.pc = 0x0100;
