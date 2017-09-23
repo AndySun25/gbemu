@@ -224,7 +224,7 @@ void add_hl_bc(void) { registers.hl = add_nn_nn(registers.hl, registers.bc); }
 void ld_a_bc_v(void) { registers.a = readByte(registers.bc); }
 
 // 0x0B
-void dec_bc(void) { registers.bc--; }
+void dec_bc(void) { registers.bc = dec_nn(registers.bc); }
 
 // 0x0C
 void inc_c(void) { registers.c = inc_n(registers.c); }
@@ -286,7 +286,7 @@ void add_hl_de(void) { registers.hl = add_nn_nn(registers.hl, registers.de); }
 void ld_a_de_v(void) { registers.a = readByte(registers.de); }
 
 // 0x1B
-void dec_de(void) { registers.de--; }
+void dec_de(void) { registers.de = dec_nn(registers.de); }
 
 // 0x1C
 void inc_e(void) { registers.e = inc_n(registers.e); }
@@ -360,7 +360,7 @@ void ldi_a_hl_v(void) {
 }
 
 // 0x2B
-void dec_hl(void) { registers.hl--; }
+void dec_hl(void) { registers.hl = dec_nn(registers.hl); }
 
 // 0x2C
 void inc_l(void) { registers.l = inc_n(registers.l); }
@@ -420,7 +420,7 @@ void ldd_a_hl_v(void) {
 }
 
 // 0x3B
-void dec_sp(void) { registers.sp--; }
+void dec_sp(void) { registers.sp = dec_nn(registers.sp); }
 
 // 0x3C
 void inc_a(void) { registers.a = inc_n(registers.a); }
