@@ -7,6 +7,7 @@
 
 
 bool stopped = false;
+bool halted = false;
 
 
 const struct instruction instructions[256] = {
@@ -139,6 +140,14 @@ const struct instruction instructions[256] = {
     {"LD A L", ld_a_l, 0, 4},
     {"LD A (HL)", ld_a_hl_v, 0, 4},
     {"LD A A (NOP)", nop, 0, 4},
+    {"ADD A B", add_a_b, 0, 4},
+    {"ADD A C", add_a_c, 0, 4},
+    {"ADD A D", add_a_d, 0, 4},
+    {"ADD A E", add_a_e, 0, 4},
+    {"ADD A H", add_a_h, 0, 4},
+    {"ADD A L", add_a_l, 0, 4},
+    {"ADD A (HL)", add_a_hl_v, 0, 4},
+    {"ADD A A", add_a_a, 0, 4},
     // Template: {"", , , },
 };
 
@@ -147,6 +156,15 @@ unsigned long cycles;
 
 unsigned char add_n_n(unsigned char t, unsigned char n) {
     unsigned int res = t + n;
+    flagSet(FLAG_Z, ~res);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, ((t & 0x0F) + (n & 0x0F)) > 0x0F);
+    flagSet(FLAG_C, res >> 8);
+    return (unsigned char) res;
+}
+
+unsigned char adc_n_n(unsigned char t, unsigned char n) {
+    unsigned int res = t + n + flagIsSet(FLAG_C);
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, ((t & 0x0F) + (n & 0x0F)) > 0x0F);
@@ -667,4 +685,73 @@ void ld_l_h(void) { registers.l = registers.h; }
 void ld_l_hl_v(void) { registers.l = readByte(registers.hl); }
 
 // 0x6F
-void ld_l_a(void) { registers.l = registers.a; }
+void ld_l_a(void) { writeByte(registers.hl, registers.a); }
+
+// 0x70
+void ld_hl_v_b(void) { writeByte(registers.hl, registers.b); }
+
+// 0x71
+void ld_hl_v_c(void) { writeByte(registers.hl, registers.c); }
+
+// 0x72
+void ld_hl_v_d(void) { writeByte(registers.hl, registers.d); }
+
+// 0x73
+void ld_hl_v_e(void) { writeByte(registers.hl, registers.e); }
+
+// 0x74
+void ld_hl_v_h(void) { writeByte(registers.hl, registers.h); }
+
+// 0x75
+void ld_hl_v_l(void) { writeByte(registers.hl, registers.l); }
+
+// 0x76
+void halt(void) { halted = true; }
+
+// 0x77
+void ld_hl_v_a(void) { writeByte(registers.hl, registers.a); }
+
+// 0x78
+void ld_a_b(void) { registers.a = registers.b; }
+
+// 0x79
+void ld_a_c(void) { registers.a = registers.c; }
+
+// 0x7A
+void ld_a_d(void) { registers.a = registers.d; }
+
+// 0x7B
+void ld_a_e(void) { registers.a = registers.e; }
+
+// 0x7C
+void ld_a_h(void) { registers.a = registers.h; }
+
+// 0x7D
+void ld_a_l(void) { registers.a = registers.l; }
+
+// 0x7E
+void ld_a_hl_v(void) { registers.a = readByte(registers.hl); }
+
+// 0x80
+void add_a_b(void) { registers.a = add_n_n(registers.a, registers.b); }
+
+// 0x81
+void add_a_c(void) { registers.a = add_n_n(registers.a, registers.c); }
+
+// 0x82
+void add_a_d(void) { registers.a = add_n_n(registers.a, registers.d); }
+
+// 0x83
+void add_a_e(void) { registers.a = add_n_n(registers.a, registers.e); }
+
+// 0x84
+void add_a_h(void) { registers.a = add_n_n(registers.a, registers.h); }
+
+// 0x85
+void add_a_l(void) { registers.a = add_n_n(registers.a, registers.l); }
+
+// 0x86
+void add_a_hl_v(void) { registers.a = add_n_n(registers.a, readByte(registers.hl)); }
+
+// 0x87
+void add_a_a(void) { registers.a = add_n_n(registers.a, registers.a); }

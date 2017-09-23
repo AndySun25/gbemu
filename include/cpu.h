@@ -3,7 +3,7 @@
 #define FLAG_H  1 << 5          // Half carry
 #define FLAG_C  1 << 4          // Carry
 
-#define flagIsSet(flag) (registers.flags & (flag))
+#define flagIsSet(flag) (unsigned char) (registers.flags & (flag))
 #define flagSet(flag, value) (registers.flags = (value) ? (registers.flags | (flag)) : (registers.flags & ~(flag)))
 
 struct instruction {
