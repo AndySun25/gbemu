@@ -338,11 +338,22 @@ void ld_h_n(unsigned char n) { registers.h = n; }
 
 // 0x27
 void daa(void) {
-    if ((registers.a & 0x0F) > 9 || flagIsSet(FLAG_H))
+    int carry = 0;
+    if ((registers.a & 0x0F) > 9 || flagIsSet(FLAG_H)) {
+        if (((unsigned int) registers.a + 0x06) > 0xFF)
+            carry = 1;
         registers.a += 0x06;
+    }
 
-    if ((registers.a >> 4) > 9 || flagIsSet(FLAG_C))
+    if ((registers.a >> 4) > 9 || flagIsSet(FLAG_C)) {
+        if (carry | ((unsigned int) registers.a + 0x60) > 0xFF)
+            carry = 1;
         registers.a += 0x60;
+    }
+
+    flagSet(FLAG_Z, registers.a == 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, carry);
 }
 
 // 0x28
@@ -374,7 +385,11 @@ void dec_l(void) { registers.l = dec_n(registers.l); }
 void ld_l_n(unsigned char n) { registers.l = n; }
 
 // 0x2F
-void cpl_a(void) { registers.a = ~registers.a; }
+void cpl_a(void) {
+    registers.a = ~registers.a;
+    flagSet(FLAG_N, 1);
+    flagSet(FLAG_H, 1);
+}
 
 // 0x30
 void jr_nc_n(short n) {
@@ -403,7 +418,11 @@ void dec_hl_v(void) { writeByte(registers.hl, dec_n(readByte(registers.hl))); }
 void ld_hl_v_n(unsigned char n) { writeByte(registers.hl, n); }
 
 // 0x37
-void scf(void) { flagSet(FLAG_C, 1); }
+void scf(void) {
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, 1);
+}
 
 // 0x38
 void jr_c_n(short n) {
@@ -434,7 +453,11 @@ void dec_a(void) { registers.a = dec_n(registers.a); }
 void ld_a_n(unsigned char n) { registers.a = n; }
 
 // 0x3F
-void ccf(void) { flagSet(FLAG_C, 0); }
+void ccf(void) {
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, ~flagIsSet(FLAG_C));
+}
 
 // 0x41
 void ld_b_c(void) { registers.b = registers.c; }
