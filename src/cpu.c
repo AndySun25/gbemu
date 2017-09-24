@@ -163,11 +163,11 @@ unsigned char add_n_n(unsigned char t, unsigned char n) {
     return (unsigned char) res;
 }
 
-unsigned char adc_n_n(unsigned char t, unsigned char n) {
-    unsigned int res = t + n + flagIsSet(FLAG_C);
+unsigned char adc_n(unsigned char n) {
+    unsigned int res = registers.a + n + flagIsSet(FLAG_C);
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 0);
-    flagSet(FLAG_H, ((t & 0x0F) + (n & 0x0F)) > 0x0F);
+    flagSet(FLAG_H, ((registers.a & 0x0F) + (n & 0x0F)) > 0x0F);
     flagSet(FLAG_C, res >> 8);
     return (unsigned char) res;
 }
