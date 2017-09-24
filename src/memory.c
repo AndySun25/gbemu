@@ -20,10 +20,13 @@ unsigned short readShort(unsigned short address) {
     return (memory[address] << 8) | (memory[address + 1]);
 }
 
-void pushStack(unsigned char n) {
-    memory[--registers.sp] = n;
+void pushStack(unsigned short nn) {
+    registers.sp -= 2;
+    writeShort(registers.sp, nn);
 }
 
-unsigned char popStack(void) {
-    return memory[registers.sp++];
+unsigned short popStack(void) {
+    unsigned short ret = readShort(registers.sp);
+    registers.sp += 2;
+    return ret;
 }

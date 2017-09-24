@@ -203,6 +203,7 @@ const struct instruction instructions[256] = {
     {"CP A L", cp_a_l, 0, 4},
     {"CP A (HL)", cp_a_hl_v, 0, 8},
     {"CP A A", cp_a_a, 0, 4},
+    {"RET NZ", ret_nz, 0, 8},           // 8 min, 20 on ret
     // Template: {"", , , },
 };
 
@@ -1014,3 +1015,11 @@ void cp_a_hl_v(void) { sub_n(readByte(registers.hl)); }
 
 // 0xBF
 void cp_a_a(void) { sub_n(registers.a); }
+
+// 0xC0
+void ret_nz(void) {
+    if (~flagIsSet(FLAG_Z)) {
+        registers.pc = popStack();
+        cycles += 12;
+    }
+}

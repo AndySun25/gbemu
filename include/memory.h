@@ -35,5 +35,5 @@ void writeShort(unsigned short address, unsigned short nn);
 unsigned char readByte(unsigned short address);
 unsigned short readShort(unsigned short address);
 
-void pushStack(unsigned char n);
-unsigned char popStack(void);
+void pushStack(unsigned short n);
+unsigned short popStack(void);
