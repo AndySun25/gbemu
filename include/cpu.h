@@ -19,6 +19,8 @@ extern unsigned long cycles;
 void reset(void);
 void cycle(void);
 
+void undefined(void);
+
 void nop(void);                     // 0x00 - No operation
 void ld_bc_nn(unsigned short nn);   // 0x01 - Load 16-bit immediate into BC
 void ld_bc_v_a(void);               // 0x02 - Save A to address pointed by BC

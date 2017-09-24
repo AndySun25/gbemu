@@ -204,6 +204,37 @@ const struct instruction instructions[256] = {
     {"CP A (HL)", cp_a_hl_v, 0, 8},
     {"CP A A", cp_a_a, 0, 4},
     {"RET NZ", ret_nz, 0, 8},           // 8 min, 20 on ret
+    {"POP BC", pop_bc, 0, 12},
+    {"JP NZ nn", jp_nz_nn, 2, 12},      // 12 min, 16 on jump
+    {"JP nn", jp_nn, 2, 16},
+    {"CALL NZ nn", call_nz_nn, 2, 12},  // 12 min, 24 on call
+    {"PUSH BC", push_bc, 0, 16},
+    {"ADD A n", add_a_n, 1, 8},
+    {"RST 0", rst_0, 0, 16},
+    {"RET Z", ret_z, 0, 8},
+    {"RET", ret, 0, 16},
+    {"JP Z nn", jp_z_nn, 2, 12},        // 12 min, 16 on jump
+    {"EXT OPS", ext_ops, 0, 4},
+    {"CALL Z nn", call_z_nn, 2, 12},    // 12 min, 24 on call
+    {"CALL nn", call_nn, 2, 24},
+    {"ADC A n", adc_a_n, 1, 8},
+    {"RST 8", rst_8, 0, 16},
+    {"RET NC", ret_nc, 0, 8},           // 8 min, 20 on ret
+    {"POP DE", pop_de, 0, 12},
+    {"JP NC nn", jp_nc_nn, 2, 12},      // 12 min, 16 on jump
+    {"CALL NC nn", call_nc_nn, 2, 12},  // 12 min, 24 on call
+    {"Undefined", undefined, 0, 0},
+    {"PUSH DE", push_de, 0, 16},
+    {"SUB A n", sub_a_n, 1, 8},
+    {"RST 10", rst_10, 0, 16},
+    {"RET C", ret_c, 0, 8},             // 8 min, 20 on ret
+    {"RETI", reti, 0, 16},
+    {"JP C nn", jp_c_nn, 2, 12},        // 12 min, 16 on jump
+    {"Undefined", undefined, 0, 0},
+    {"CALL C nn", call_c_nn, 2, 12},    // 12 min, 24 on call
+    {"Undefined", undefined, 0, 0},
+    {"SBC A n", sbc_a_n, 1, 8},
+    {"RST 18", rst_18, 0, 16},
     // Template: {"", , , },
 };
 
@@ -383,6 +414,11 @@ void cycle(void) {
     cycles += instructions[instruction].base_cycles;
 }
 
+void undefined(void) {
+    printf("Illegal opcode detected at %x!", registers.pc - 1);
+    exit(0);
+}
+
 // 0x00
 void nop(void) {}
 
@@ -405,13 +441,7 @@ void dec_b(void) { registers.b = dec_n(registers.b); }
 void ld_b_n(unsigned char n) { registers.b = n; }
 
 // 0x07
-void rlc_a(void) {
-    flagSet(FLAG_C, registers.a & 0b10000000);
-    registers.a <<= 1;
-    flagSet(FLAG_Z, registers.a == 0);
-    flagSet(FLAG_H, 0);
-    flagSet(FLAG_N, 0);
-}
+void rlc_a(void) { registers.a = rlc_n(registers.a); }
 
 // 0x08
 void ld_nn_sp(unsigned short nn) { writeShort(nn, registers.sp); }
@@ -435,13 +465,7 @@ void dec_c(void) { registers.c = dec_n(registers.c); }
 void ld_c_n(unsigned char n) { registers.c = n; }
 
 // 0x0F
-void rrc_a(void) {
-    flagSet(FLAG_C, registers.a & 0x01);
-    registers.a >>= 1;
-    flagSet(FLAG_Z, registers.a == 0);
-    flagSet(FLAG_H, 0);
-    flagSet(FLAG_N, 0);
-}
+void rrc_a(void) { registers.a = rrc_n(registers.a); }
 
 // 0x10
 void stop(void) { stopped = true; }
@@ -465,15 +489,7 @@ void dec_d(void) { registers.d = dec_n(registers.d); }
 void ld_d_n(unsigned char n) { registers.d = n; }
 
 // 0x17
-void rl_a(void) {
-    unsigned char carry = flagIsSet(FLAG_C);
-    flagSet(FLAG_C, registers.a & 0b10000000);
-    registers.a <<= 1;
-    registers.a |= carry;
-    flagSet(FLAG_Z, registers.a == 0);
-    flagSet(FLAG_H, 0);
-    flagSet(FLAG_N, 0);
-}
+void rl_a(void) { registers.a = rl_n(registers.a); }
 
 // 0x18
 void jr_n(short n) { registers.pc += n; }
@@ -497,15 +513,7 @@ void dec_e(void) { registers.e = dec_n(registers.e); }
 void ld_e_n(unsigned char n) { registers.e = n; }
 
 // 0x1F
-void rr_a(void) {
-    unsigned char carry = flagIsSet(FLAG_C) << 7;
-    flagSet(FLAG_C, registers.a & 0x01);
-    registers.a >>= 1;
-    registers.a |= carry;
-    flagSet(FLAG_Z, registers.a == 0);
-    flagSet(FLAG_H, 0);
-    flagSet(FLAG_N, 0);
-}
+void rr_a(void) { registers.a = rr_n(registers.a); }
 
 // 0x20
 void jr_nz_n(short n) {
@@ -1022,4 +1030,171 @@ void ret_nz(void) {
         registers.pc = popStack();
         cycles += 12;
     }
+}
+
+// 0xC1
+void pop_bc(void) { registers.bc = popStack(); }
+
+// 0xC2
+void jp_nz_nn(unsigned short nn) {
+    if (~flagIsSet(FLAG_Z)) {
+        registers.pc = nn;
+        cycles += 4;
+    }
+}
+
+// 0xC3
+void jp_nn(unsigned short nn) {
+    registers.pc = nn;
+}
+
+// 0xC4
+void call_nz_nn(unsigned short nn) {
+    if (~flagIsSet(FLAG_Z)) {
+        pushStack(registers.pc);
+        registers.pc = nn;
+        cycles += 12;
+    }
+}
+
+// 0xC5
+void push_bc(void) { pushStack(registers.bc); }
+
+// 0xC6
+void add_a_n(unsigned char n) { registers.a = add_n_n(registers.a, n); }
+
+// 0xC7
+void rst_0(void) {
+    pushStack(registers.pc);
+    registers.pc = 0;
+}
+
+// 0xC8
+void ret_z(void) {
+    if (flagIsSet(FLAG_Z)) {
+        registers.pc = popStack();
+        cycles += 12;
+    }
+}
+
+// 0xC9
+void ret(void) {
+    registers.pc = popStack();
+}
+
+// 0xCA
+void jp_z_nn(unsigned short nn) {
+    if (flagIsSet(FLAG_Z)) {
+        registers.pc = nn;
+        cycles += 4;
+    }
+}
+
+// 0xCB
+void ext_ops(void) {
+    // TODO implement this
+}
+
+// 0xCC
+void call_z_nn(unsigned short nn) {
+    if (flagIsSet(FLAG_Z)) {
+        pushStack(registers.pc);
+        registers.pc = nn;
+        cycles += 12;
+    }
+}
+
+// 0xCD
+void call_nn(unsigned short nn) {
+    pushStack(registers.pc);
+    registers.pc = nn;
+}
+
+// 0xCE
+void adc_a_n(unsigned char n) { registers.a = adc_n(n); }
+
+// 0xCF
+void rst_8(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x8;
+}
+
+// 0xD0
+void ret_nc(void) {
+    if (~flagIsSet(FLAG_C)) {
+        registers.pc = popStack();
+        cycles += 12;
+    }
+}
+
+// 0xD1
+void pop_de(void) { registers.de = popStack(); }
+
+// 0xD2
+void jp_nc_nn(unsigned short nn) {
+    if (~flagIsSet(FLAG_C)) {
+        registers.pc = nn;
+        cycles += 4;
+    }
+}
+
+// 0xD4
+void call_nc_nn(unsigned short nn) {
+    if (~flagIsSet(FLAG_C)) {
+        pushStack(registers.pc);
+        registers.pc = nn;
+        cycles += 12;
+    }
+}
+
+// 0xD5
+void push_de(void) { pushStack(registers.de); }
+
+// 0xD6
+void sub_a_n(unsigned char n) { registers.a = sub_n(n); }
+
+// 0xD7
+void rst_10(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x10;
+}
+
+// 0xD8
+void ret_c(void) {
+    if (flagIsSet(FLAG_C)) {
+        registers.pc = popStack();
+        cycles += 12;
+    }
+}
+
+// 0xD9
+void reti(void) {
+    registers.pc = popStack();
+    // TODO interrupt stuff
+}
+
+// 0xDA
+void jp_c_nn(unsigned short nn) {
+    if (flagIsSet(FLAG_C)) {
+        registers.pc = nn;
+        cycles += 4;
+    }
+}
+
+// 0xDC
+void call_c_nn(unsigned short nn) {
+    if (flagIsSet(FLAG_C)) {
+        pushStack(registers.pc);
+        registers.pc = nn;
+        cycles += 12;
+    }
+}
+
+// 0xDE
+void sbc_a_n(unsigned char n) { registers.a = sbc_n(n); }
+
+// 0xDF
+void rst_18(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x18;
 }
