@@ -189,31 +189,31 @@ void sbc_a_l(void);                 // 0x9D - Subtract L and carry flag from A
 void sbc_a_hl_v(void);              // 0x9E - Subtract value pointed by HL and carry flag from A
 void sbc_a_a(void);                 // 0x9D - Subtract A and carry flag from A
 
-void and_a_b(void);                   // 0xA0 - Logical AND B against A
-void and_a_c(void);                   // 0xA1 - Logical AND C against A
-void and_a_d(void);                   // 0xA2 - Logical AND D against A
-void and_a_e(void);                   // 0xA3 - Logical AND E against A
-void and_a_h(void);                   // 0xA4 - Logical AND H against A
-void and_a_l(void);                   // 0xA5 - Logical AND L against A
-void and_a_hl_v(void);                // 0xA6 - Logical AND value pointed by HL against A
-// Equivalent of NOP                // 0xA7 - Logical AND A against A
-void xor_b(void);                   // 0xA8 - Logical XOR B against A
-void xor_c(void);                   // 0xA9 - Logical XOR C against A
-void xor_d(void);                   // 0xAA - Logical XOR D against A
-void xor_e(void);                   // 0xAB - Logical XOR E against A
-void xor_h(void);                   // 0xAC - Logical XOR H against A
-void xor_l(void);                   // 0xAD - Logical XOR B against A
-void xor_hl_v(void);                // 0xAE - Logical XOR value pointed by HL against A
-void xor_a(void);                   // 0xAF - Logical XOR A against A
+void and_a_b(void);                 // 0xA0 - Logical AND B against A
+void and_a_c(void);                 // 0xA1 - Logical AND C against A
+void and_a_d(void);                 // 0xA2 - Logical AND D against A
+void and_a_e(void);                 // 0xA3 - Logical AND E against A
+void and_a_h(void);                 // 0xA4 - Logical AND H against A
+void and_a_l(void);                 // 0xA5 - Logical AND L against A
+void and_a_hl_v(void);              // 0xA6 - Logical AND value pointed by HL against A
+void and_a_a(void);                 // 0xA7 - Logical AND A against A
+void xor_a_b(void);                 // 0xA8 - Logical XOR B against A
+void xor_a_c(void);                 // 0xA9 - Logical XOR C against A
+void xor_a_d(void);                 // 0xAA - Logical XOR D against A
+void xor_a_e(void);                 // 0xAB - Logical XOR E against A
+void xor_a_h(void);                 // 0xAC - Logical XOR H against A
+void xor_a_l(void);                 // 0xAD - Logical XOR B against A
+void xor_a_hl_v(void);              // 0xAE - Logical XOR value pointed by HL against A
+void xor_a_a(void);                 // 0xAF - Logical XOR A against A
 
-void or_b(void);                    // 0xB0 - Logical OR B against A
-void or_c(void);                    // 0xB1 - Logical OR C against A
-void or_d(void);                    // 0xB2 - Logical OR D against A
-void or_e(void);                    // 0xB3 - Logical OR E against A
-void or_h(void);                    // 0xB4 - Logical OR H against A
-void or_l(void);                    // 0xB5 - Logical OR L against A
-void or_hl_v(void);                 // 0xB6 - Logical OR value pointed by HL against A
-void or_a(void);                    // 0xB7 - Logical OR A against A
+void or_a_b(void);                  // 0xB0 - Logical OR B against A
+void or_a_c(void);                  // 0xB1 - Logical OR C against A
+void or_a_d(void);                  // 0xB2 - Logical OR D against A
+void or_a_e(void);                  // 0xB3 - Logical OR E against A
+void or_a_h(void);                  // 0xB4 - Logical OR H against A
+void or_a_l(void);                  // 0xB5 - Logical OR L against A
+void or_a_hl_v(void);               // 0xB6 - Logical OR value pointed by HL against A
+void or_a_a(void);                  // 0xB7 - Logical OR A against A
 void cp_b(void);                    // 0xB8 - Compare B against A
 void cp_c(void);                    // 0xB9 - Compare C against A
 void cp_d(void);                    // 0xBA - Compare D against A
@@ -263,7 +263,7 @@ void ldh_c_a(void);                 // 0xE2 - Save A at address pointed to by (0
 // Undefined                        // 0xE3
 // Undefined                        // 0xE4
 void push_hl(void);                 // 0xE5 - Push 16-bit HL onto stack
-void and_a_n(unsigned char n);        // 0xE6 - Logical AND 8-bit immediate and A
+void and_a_n(unsigned char n);      // 0xE6 - Logical AND 8-bit immediate and A
 void rst_20(void);                  // 0xE7 - Call routine at address 0x0020
 void add_sp_d(char d);              // 0xE8 - Add signed 8-bit immediate to SP
 void jp_hl_v(void);                 // 0xE9 - Jump to 16-bit value pointed by HL
@@ -271,7 +271,7 @@ void ld_nn_a(unsigned short nn);    // 0xEA - Save A at given 16-bit address
 // Undefined                        // 0xEB
 // Undefined                        // 0xEC
 // Undefined                        // 0xED
-void xor_n(unsigned char n);        // 0xEE - Logical XOR 8-bit immediate against A
+void xor_a_n(unsigned char n);      // 0xEE - Logical XOR 8-bit immediate against A
 void rst_28(void);                  // 0xEF - Call routine at address 0x0028
 
 void ldh_a_n(unsigned char n);      // 0xF0 - Load A from address pointed to by (0xFF00 + 8-bit immediate)
@@ -280,7 +280,7 @@ void pop_af(void);                  // 0xF1 - Pop 16-bit value from stack into A
 void di(void);                      // 0xF3 - Disable interrupts
 // Undefined                        // 0xF4
 void push_af(void);                 // 0xF5 - Push 16-bit AF onto stack
-void or_n(unsigned char n);         // 0xF6 - Logical OR 8-bit immediate against A
+void or_a_n(unsigned char n);       // 0xF6 - Logical OR 8-bit immediate against A
 void rst_30(void);                  // 0xF7 - Call routine at 0x0030
 void ldhl_sp_d(char d);             // 0xF8 - Add signed 8-bit immediate to SP and save result in HL
 void ld_sp_hl(void);                // 0xF9 - Copy HL to SP

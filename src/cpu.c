@@ -178,7 +178,23 @@ const struct instruction instructions[256] = {
     {"AND A H", and_a_h, 0, 4},
     {"AND A L", and_a_l, 0, 4},
     {"AND A (HL)", and_a_hl_v, 0, 8},
-    {"AND A A (NOP)", nop, 0, 4},
+    {"AND A A", and_a_a, 0, 4},
+    {"XOR A B", xor_a_b, 0, 4},
+    {"XOR A C", xor_a_c, 0, 4},
+    {"XOR A D", xor_a_d, 0, 4},
+    {"XOR A E", xor_a_e, 0, 4},
+    {"XOR A H", xor_a_h, 0, 4},
+    {"XOR A L", xor_a_l, 0, 4},
+    {"XOR A (HL)", xor_a_hl_v, 0, 8},
+    {"XOR A A", xor_a_a, 0, 4},
+    {"OR A B", or_a_b, 0, 4},
+    {"OR A C", or_a_c, 0, 4},
+    {"OR A D", or_a_d, 0, 4},
+    {"OR A E", or_a_e, 0, 4},
+    {"OR A H", or_a_h, 0, 4},
+    {"OR A L", or_a_l, 0, 4},
+    {"OR A (HL)", or_a_hl_v, 0, 8},
+    {"OR A A", or_a_a, 0, 4},
     // Template: {"", , , },
 };
 
@@ -252,6 +268,24 @@ unsigned char and_n(unsigned char n) {
     flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 1);
+    flagSet(FLAG_C, 0);
+    return res;
+}
+
+unsigned char xor_n(unsigned char n) {
+    unsigned char res = registers.a ^ n;
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, 0);
+    return res;
+}
+
+unsigned char or_n(unsigned char n) {
+    unsigned char res = registers.a | n;
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
     flagSet(FLAG_C, 0);
     return res;
 }
@@ -897,3 +931,54 @@ void and_a_l(void) { registers.a = and_n(registers.l); }
 
 // 0xA6
 void and_a_hl_v(void) { registers.a = and_n(readByte(registers.hl)); }
+
+// 0xA7
+void and_a_a(void) { registers.a = and_n(registers.a); }
+
+// 0xA8
+void xor_a_b(void) { registers.a = xor_n(registers.b); }
+
+// 0xA9
+void xor_a_c(void) { registers.a = xor_n(registers.c); }
+
+// 0xAA
+void xor_a_d(void) { registers.a = xor_n(registers.d); }
+
+// 0xAB
+void xor_a_e(void) { registers.a = xor_n(registers.e); }
+
+// 0xAC
+void xor_a_h(void) { registers.a = xor_n(registers.h); }
+
+// 0xAD
+void xor_a_l(void) { registers.a = xor_n(registers.l); }
+
+// 0xAE
+void xor_a_hl_v(void) { registers.a = xor_n(readByte(registers.hl)); }
+
+// 0xAF
+void xor_a_a(void) { registers.a = xor_n(registers.a); }
+
+// 0xB0
+void or_a_b(void) { registers.a = or_n(registers.b); }
+
+// 0xB1
+void or_a_c(void) { registers.a = or_n(registers.c); }
+
+// 0xB2
+void or_a_d(void) { registers.a = or_n(registers.d); }
+
+// 0xB3
+void or_a_e(void) { registers.a = or_n(registers.e); }
+
+// 0xB4
+void or_a_h(void) { registers.a = or_n(registers.h); }
+
+// 0xB5
+void or_a_l(void) { registers.a = or_n(registers.l); }
+
+// 0xB6
+void or_a_hl_v(void) { registers.a = or_n(readByte(registers.hl)); }
+
+// 0xB7
+void or_a_a(void) { registers.a = or_n(registers.a); }
