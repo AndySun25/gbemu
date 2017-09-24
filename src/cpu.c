@@ -81,7 +81,7 @@ const struct instruction instructions[256] = {
     {"LD B E", ld_b_e, 0, 4},
     {"LD B H", ld_b_h, 0, 4},
     {"LD B L", ld_b_l, 0, 4},
-    {"LD B (HL)", ld_b_hl_v, 0, 4},
+    {"LD B (HL)", ld_b_hl_v, 0, 8},
     {"LD B A", ld_b_a, 0, 4},
     {"LD C B", ld_c_b, 0, 4},
     {"LD C C (NOP)", nop, 0, 4},
@@ -89,7 +89,7 @@ const struct instruction instructions[256] = {
     {"LD C E", ld_c_e, 0, 4},
     {"LD C H", ld_c_h, 0, 4},
     {"LD C L", ld_c_l, 0, 4},
-    {"LD C (HL)", ld_c_hl_v, 0, 4},
+    {"LD C (HL)", ld_c_hl_v, 0, 8},
     {"LD C A", ld_c_a, 0, 4},
     {"LD D B", ld_d_b, 0, 4},
     {"LD D C", ld_d_c, 0, 4},
@@ -97,7 +97,7 @@ const struct instruction instructions[256] = {
     {"LD D E", ld_d_e, 0, 4},
     {"LD D H", ld_d_h, 0, 4},
     {"LD D L", ld_d_l, 0, 4},
-    {"LD D (HL)", ld_d_hl_v, 0, 4},
+    {"LD D (HL)", ld_d_hl_v, 0, 8},
     {"LD D A", ld_d_a, 0, 4},
     {"LD E B", ld_e_b, 0, 4},
     {"LD E C", ld_e_c, 0, 4},
@@ -105,7 +105,7 @@ const struct instruction instructions[256] = {
     {"LD E E (NOP)", nop, 0, 4},
     {"LD E H", ld_e_h, 0, 4},
     {"LD E L", ld_e_l, 0, 4},
-    {"LD E (HL)", ld_e_hl_v, 0, 4},
+    {"LD E (HL)", ld_e_hl_v, 0, 8},
     {"LD E A", ld_e_a, 0, 4},
     {"LD H B", ld_h_b, 0, 4},
     {"LD H C", ld_h_c, 0, 4},
@@ -113,7 +113,7 @@ const struct instruction instructions[256] = {
     {"LD H E", ld_h_e, 0, 4},
     {"LD H H (NOP)", nop, 0, 4},
     {"LD H L", ld_h_l, 0, 4},
-    {"LD H (HL)", ld_h_hl_v, 0, 4},
+    {"LD H (HL)", ld_h_hl_v, 0, 8},
     {"LD H A", ld_h_a, 0, 4},
     {"LD L B", ld_l_b, 0, 4},
     {"LD L C", ld_l_c, 0, 4},
@@ -121,24 +121,23 @@ const struct instruction instructions[256] = {
     {"LD L E", ld_l_e, 0, 4},
     {"LD L H", ld_l_h, 0, 4},
     {"LD L L (NOP)", nop, 0, 4},
-    {"LD L (HL)", ld_l_hl_v, 0, 4},
+    {"LD L (HL)", ld_l_hl_v, 0, 8},
     {"LD L A", ld_l_a, 0, 4},
-    {"LD (HL) B", ld_hl_v_b, 0, 4},
-    {"LD (HL) C", ld_hl_v_c, 0, 4},
-    {"LD (HL) D", ld_hl_v_d, 0, 4},
-    {"LD (HL) E", ld_hl_v_e, 0, 4},
-    {"LD (HL) H", ld_hl_v_h, 0, 4},
-    {"LD (HL) L", ld_hl_v_l, 0, 4},
-    {"LD (HL) (HL) (NOP)", nop, 0, 4},
+    {"LD (HL) B", ld_hl_v_b, 0, 8},
+    {"LD (HL) C", ld_hl_v_c, 0, 8},
+    {"LD (HL) D", ld_hl_v_d, 0, 8},
+    {"LD (HL) E", ld_hl_v_e, 0, 8},
+    {"LD (HL) H", ld_hl_v_h, 0, 8},
+    {"LD (HL) L", ld_hl_v_l, 0, 8},
     {"HALT", halt, 0, 4},
-    {"LD (HL) A", ld_hl_v_a, 0, 4},
+    {"LD (HL) A", ld_hl_v_a, 0, 8},
     {"LD A B", ld_a_b, 0, 4},
     {"LD A C", ld_a_c, 0, 4},
     {"LD A D", ld_a_d, 0, 4},
     {"LD A E", ld_a_e, 0, 4},
     {"LD A H", ld_a_h, 0, 4},
     {"LD A L", ld_a_l, 0, 4},
-    {"LD A (HL)", ld_a_hl_v, 0, 4},
+    {"LD A (HL)", ld_a_hl_v, 0, 8},
     {"LD A A (NOP)", nop, 0, 4},
     {"ADD A B", add_a_b, 0, 4},
     {"ADD A C", add_a_c, 0, 4},
@@ -146,8 +145,16 @@ const struct instruction instructions[256] = {
     {"ADD A E", add_a_e, 0, 4},
     {"ADD A H", add_a_h, 0, 4},
     {"ADD A L", add_a_l, 0, 4},
-    {"ADD A (HL)", add_a_hl_v, 0, 4},
+    {"ADD A (HL)", add_a_hl_v, 0, 8},
     {"ADD A A", add_a_a, 0, 4},
+    {"ADC A B", adc_a_b, 0, 4},
+    {"ADC A C", adc_a_c, 0, 4},
+    {"ADC A D", adc_a_d, 0, 4},
+    {"ADC A E", adc_a_e, 0, 4},
+    {"ADC A H", adc_a_h, 0, 4},
+    {"ADC A L", adc_a_l, 0, 4},
+    {"ADC A (HL)", adc_a_hl_v, 0, 8},
+    {"ADC A A", adc_a_a, 0, 4},
     // Template: {"", , , },
 };
 
@@ -755,3 +762,27 @@ void add_a_hl_v(void) { registers.a = add_n_n(registers.a, readByte(registers.hl
 
 // 0x87
 void add_a_a(void) { registers.a = add_n_n(registers.a, registers.a); }
+
+// 0x88
+void adc_a_b(void) { registers.a = adc_n(registers.b); }
+
+// 0x89
+void adc_a_c(void) { registers.a = adc_n(registers.c); }
+
+// 0x8A
+void adc_a_d(void) { registers.a = adc_n(registers.d); }
+
+// 0x8B
+void adc_a_e(void) { registers.a = adc_n(registers.e); }
+
+// 0x8C
+void adc_a_h(void) { registers.a = adc_n(registers.h); }
+
+// 0x8D
+void adc_a_l(void) { registers.a = adc_n(registers.l); }
+
+// 0x8E
+void adc_a_hl_v(void) { registers.a = adc_n(readByte(registers.hl)); }
+
+// 0x8F
+void adc_a_a(void) { registers.a = adc_n(registers.a); }
