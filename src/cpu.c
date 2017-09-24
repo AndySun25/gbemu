@@ -266,7 +266,7 @@ unsigned char rlc_n(unsigned char t) {
 }
 
 unsigned char rl_n(unsigned char t) {
-    unsigned char carry = (unsigned char) flagIsSet(FLAG_C);
+    unsigned char carry = flagIsSet(FLAG_C);
     flagSet(FLAG_C, t & 0b10000000);
     t <<= 1;
     t |= carry;
@@ -285,7 +285,7 @@ unsigned char rrc_n(unsigned char t) {
 }
 
 unsigned char rr_n(unsigned char t) {
-    unsigned char carry = ((unsigned char) flagIsSet(FLAG_C)) << 7;
+    unsigned char carry = flagIsSet(FLAG_C) << 7;
     flagSet(FLAG_C, t & 0x01);
     t >>= 1;
     t |= carry;
@@ -423,7 +423,7 @@ void ld_d_n(unsigned char n) { registers.d = n; }
 
 // 0x17
 void rl_a(void) {
-    unsigned char carry = (unsigned char) flagIsSet(FLAG_C);
+    unsigned char carry = flagIsSet(FLAG_C);
     flagSet(FLAG_C, registers.a & 0b10000000);
     registers.a <<= 1;
     registers.a |= carry;
@@ -455,7 +455,7 @@ void ld_e_n(unsigned char n) { registers.e = n; }
 
 // 0x1F
 void rr_a(void) {
-    unsigned char carry = ((unsigned char) flagIsSet(FLAG_C)) << 7;
+    unsigned char carry = flagIsSet(FLAG_C) << 7;
     flagSet(FLAG_C, registers.a & 0x01);
     registers.a >>= 1;
     registers.a |= carry;
