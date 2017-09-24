@@ -155,6 +155,30 @@ const struct instruction instructions[256] = {
     {"ADC A L", adc_a_l, 0, 4},
     {"ADC A (HL)", adc_a_hl_v, 0, 8},
     {"ADC A A", adc_a_a, 0, 4},
+    {"SUB A B", sub_a_b, 0, 4},
+    {"SUB A C", sub_a_c, 0, 4},
+    {"SUB A D", sub_a_d, 0, 4},
+    {"SUB A E", sub_a_e, 0, 4},
+    {"SUB A H", sub_a_h, 0, 4},
+    {"SUB A L", sub_a_l, 0, 4},
+    {"SUB A (HL)", sub_a_hl_v, 0, 8},
+    {"SUB A A", sub_a_a, 0, 4},
+    {"SBC A B", sbc_a_b, 0, 4},
+    {"SBC A C", sbc_a_c, 0, 4},
+    {"SBC A D", sbc_a_d, 0, 4},
+    {"SBC A E", sbc_a_e, 0, 4},
+    {"SBC A H", sbc_a_h, 0, 4},
+    {"SBC A L", sbc_a_l, 0, 4},
+    {"SBC A (HL)", sbc_a_hl_v, 0, 8},
+    {"SBC A A", sbc_a_a, 0, 4},
+    {"AND A B", and_a_b, 0, 4},
+    {"AND A C", and_a_c, 0, 4},
+    {"AND A D", and_a_d, 0, 4},
+    {"AND A E", and_a_e, 0, 4},
+    {"AND A H", and_a_h, 0, 4},
+    {"AND A L", and_a_l, 0, 4},
+    {"AND A (HL)", and_a_hl_v, 0, 8},
+    {"AND A A (NOP)", nop, 0, 4},
     // Template: {"", , , },
 };
 
@@ -180,7 +204,16 @@ unsigned char adc_n(unsigned char n) {
 }
 
 unsigned char sub_n(unsigned char n) {
-    unsigned char res = registers.a + n;
+    unsigned char res = registers.a - n;
+    flagSet(FLAG_Z, ~res);
+    flagSet(FLAG_N, 1);
+    flagSet(FLAG_H, (registers.a & 0x0F) < (n & 0x0F));
+    flagSet(FLAG_C, n > registers.a);
+    return res;
+}
+
+unsigned char sbc_n(unsigned char n) {
+    unsigned char res = registers.a - (n + flagIsSet(FLAG_C));
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 1);
     flagSet(FLAG_H, (registers.a & 0x0F) < (n & 0x0F));
@@ -197,7 +230,7 @@ unsigned char inc_n(unsigned char t) {
 }
 
 unsigned char dec_n(unsigned char t) {
-    unsigned char res = t + (unsigned char) 1;
+    unsigned char res = t - (unsigned char) 1;
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 1);
     flagSet(FLAG_H, (t & 0x0F) < 1);
@@ -212,6 +245,15 @@ unsigned short inc_nn(unsigned short t) {
 // For uniformity purposes
 unsigned short dec_nn(unsigned short t) {
     return --t;
+}
+
+unsigned char and_n(unsigned char n) {
+    unsigned char res = registers.a & n;
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 1);
+    flagSet(FLAG_C, 0);
+    return res;
 }
 
 unsigned char rlc_n(unsigned char t) {
@@ -786,3 +828,72 @@ void adc_a_hl_v(void) { registers.a = adc_n(readByte(registers.hl)); }
 
 // 0x8F
 void adc_a_a(void) { registers.a = adc_n(registers.a); }
+
+// 0x90
+void sub_a_b(void) { registers.a = sub_n(registers.b); }
+
+// 0x91
+void sub_a_c(void) { registers.a = sub_n(registers.c); }
+
+// 0x92
+void sub_a_d(void) { registers.a = sub_n(registers.d); }
+
+// 0x93
+void sub_a_e(void) { registers.a = sub_n(registers.e); }
+
+// 0x94
+void sub_a_h(void) { registers.a = sub_n(registers.h); }
+
+// 0x95
+void sub_a_l(void) { registers.a = sub_n(registers.l); }
+
+// 0x96
+void sub_a_hl_v(void) { registers.a = sub_n(readByte(registers.hl)); }
+
+// 0x97
+void sub_a_a(void) { registers.a = sub_n(registers.a); }
+
+// 0x98
+void sbc_a_b(void) { registers.a = sbc_n(registers.b); }
+
+// 0x99
+void sbc_a_c(void) { registers.a = sbc_n(registers.c); }
+
+// 0x9A
+void sbc_a_d(void) { registers.a = sbc_n(registers.d); }
+
+// 0x9B
+void sbc_a_e(void) { registers.a = sbc_n(registers.e); }
+
+// 0x9C
+void sbc_a_h(void) { registers.a = sbc_n(registers.h); }
+
+// 0x9D
+void sbc_a_l(void) { registers.a = sbc_n(registers.l); }
+
+// 0x9E
+void sbc_a_hl_v(void) { registers.a = sbc_n(readByte(registers.hl)); }
+
+// 0x9F
+void sbc_a_a(void) { registers.a = sbc_n(registers.a); }
+
+// 0xA0
+void and_a_b(void) { registers.a = and_n(registers.b); }
+
+// 0xA1
+void and_a_c(void) { registers.a = and_n(registers.c); }
+
+// 0xA2
+void and_a_d(void) { registers.a = and_n(registers.d); }
+
+// 0xA3
+void and_a_e(void) { registers.a = and_n(registers.e); }
+
+// 0xA4
+void and_a_h(void) { registers.a = and_n(registers.h); }
+
+// 0xA5
+void and_a_l(void) { registers.a = and_n(registers.l); }
+
+// 0xA6
+void and_a_hl_v(void) { registers.a = and_n(readByte(registers.hl)); }

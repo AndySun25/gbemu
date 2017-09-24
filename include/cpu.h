@@ -189,13 +189,13 @@ void sbc_a_l(void);                 // 0x9D - Subtract L and carry flag from A
 void sbc_a_hl_v(void);              // 0x9E - Subtract value pointed by HL and carry flag from A
 void sbc_a_a(void);                 // 0x9D - Subtract A and carry flag from A
 
-void and_b(void);                   // 0xA0 - Logical AND B against A
-void and_c(void);                   // 0xA1 - Logical AND C against A
-void and_d(void);                   // 0xA2 - Logical AND D against A
-void and_e(void);                   // 0xA3 - Logical AND E against A
-void and_h(void);                   // 0xA4 - Logical AND H against A
-void and_l(void);                   // 0xA5 - Logical AND L against A
-void and_hl_v(void);                // 0xA6 - Logical AND value pointed by HL against A
+void and_a_b(void);                   // 0xA0 - Logical AND B against A
+void and_a_c(void);                   // 0xA1 - Logical AND C against A
+void and_a_d(void);                   // 0xA2 - Logical AND D against A
+void and_a_e(void);                   // 0xA3 - Logical AND E against A
+void and_a_h(void);                   // 0xA4 - Logical AND H against A
+void and_a_l(void);                   // 0xA5 - Logical AND L against A
+void and_a_hl_v(void);                // 0xA6 - Logical AND value pointed by HL against A
 // Equivalent of NOP                // 0xA7 - Logical AND A against A
 void xor_b(void);                   // 0xA8 - Logical XOR B against A
 void xor_c(void);                   // 0xA9 - Logical XOR C against A
@@ -263,7 +263,7 @@ void ldh_c_a(void);                 // 0xE2 - Save A at address pointed to by (0
 // Undefined                        // 0xE3
 // Undefined                        // 0xE4
 void push_hl(void);                 // 0xE5 - Push 16-bit HL onto stack
-void and_n(unsigned char n);        // 0xE6 - Logical AND 8-bit immediate and A
+void and_a_n(unsigned char n);        // 0xE6 - Logical AND 8-bit immediate and A
 void rst_20(void);                  // 0xE7 - Call routine at address 0x0020
 void add_sp_d(char d);              // 0xE8 - Add signed 8-bit immediate to SP
 void jp_hl_v(void);                 // 0xE9 - Jump to 16-bit value pointed by HL
