@@ -235,7 +235,38 @@ const struct instruction instructions[256] = {
     {"Undefined", undefined, 0, 0},
     {"SBC A n", sbc_a_n, 1, 8},
     {"RST 18", rst_18, 0, 16},
-    // Template: {"", , , },
+    {"LDH n A", ldh_n_a, 1, 12},
+    {"POP HL", pop_hl, 0, 12},
+    {"LDH C A", ldh_c_a, 0, 8},
+    {"Undefined", undefined, 0, 0},
+    {"Undefined", undefined, 0, 0},
+    {"PUSH HL", push_hl, 0, 16},
+    {"AND A n", and_a_n, 1, 8},
+    {"RST 20", rst_20, 0, 16},
+    {"ADD SP d", add_sp_d, 1, 16},
+    {"JP HL", jp_hl, 0, 4},
+    {"LD nn A", ld_nn_a, 2, 16},
+    {"Undefined", undefined, 0, 0},
+    {"Undefined", undefined, 0, 0},
+    {"Undefined", undefined, 0, 0},
+    {"XOR A n", xor_a_n, 1, 8},
+    {"RST 28", rst_28, 0, 16},
+    {"LDH A n", ldh_a_n, 1, 12},
+    {"POP AF", pop_af, 0, 12},
+    {"Undefined", undefined, 0, 0},
+    {"DI", di, 0, 4},
+    {"Undefined", undefined, 0, 0},
+    {"PUSH AF", push_af, 0, 16},
+    {"OR A n", or_a_n, 1, 8},
+    {"RST 30", rst_30, 0, 16},
+    {"LD HL,SP+d", ldhl_sp_d, 1, 12},
+    {"LD SP HL", ld_sp_hl, 0, 8},
+    {"LD A (nn)", ld_a_nn_v, 2, 16},
+    {"EI", ei, 0, 4},
+    {"Undefined", undefined, 0, 0},
+    {"Undefined", undefined, 0, 0},
+    {"CP A n", cp_a_n, 1, 8},
+    {"RST 38", rst_38, 0, 16},
 };
 
 unsigned long cycles;
@@ -1197,4 +1228,98 @@ void sbc_a_n(unsigned char n) { registers.a = sbc_n(n); }
 void rst_18(void) {
     pushStack(registers.pc);
     registers.pc = 0x18;
+}
+
+// 0xE0
+void ldh_n_a(unsigned char n) { writeByte((unsigned short) 0xFF00 + n, registers.a); }
+
+// 0xE1
+void pop_hl(void) { registers.hl = popStack(); }
+
+// 0xE2
+void ldh_c_a(void) { writeByte((unsigned short) 0xFF00 + registers.c, registers.a); }
+
+// 0xE5
+void push_hl(void) { pushStack(registers.hl); }
+
+// 0xE6
+void and_a_n(unsigned char n) { registers.a = and_n(n); }
+
+// 0xE7
+void rst_20(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x20;
+}
+
+// 0xE8
+void add_sp_d(char d) { registers.sp += d; }
+
+// 0xE9
+void jp_hl(void) {
+    registers.pc = registers.hl;
+    cycles += 4;
+}
+
+// 0xEA
+void ld_nn_a(unsigned short nn) { writeByte(nn, registers.a); }
+
+// 0xEE
+void xor_a_n(unsigned char n) { registers.a = xor_n(n); }
+
+// 0xEF
+void rst_28(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x28;
+}
+
+// 0xF0
+void ldh_a_n(unsigned char n) { registers.a = readByte((unsigned short) 0xFF00 + n); }
+
+// 0xF1
+void pop_af(void) { registers.af = popStack(); }
+
+// 0xF3
+void di(void) {
+    // TODO implement interrupts
+}
+
+// 0xF5
+void push_af(void) { pushStack(registers.af); }
+
+// 0xF6
+void or_a_n(unsigned char n) { registers.a = or_n(n); }
+
+// 0xF7
+void rst_30(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x30;
+}
+
+// 0xF8
+void ldhl_sp_d(char d) {
+    unsigned long res = registers.sp + d;
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, ((registers.sp & 0xFFF) + (d & 0xFFF)) > 0xFFF);
+    flagSet(FLAG_C, res & 0xFFFF0000);
+    registers.hl = (unsigned short) res;
+}
+
+// 0xF9
+void ld_sp_hl(void) { registers.sp = registers.hl; }
+
+// 0xFA
+void ld_a_nn_v(unsigned short nn) { registers.a = readByte(nn); }
+
+// 0xFB
+void ei(void) {
+    // TODO implement interrupts
+}
+
+// 0xFE
+void cp_a_n(unsigned char n) { sub_n(n); }
+
+// 0xFF
+void rst_38(void) {
+    pushStack(registers.pc);
+    registers.pc = 0x38;
 }

@@ -268,7 +268,7 @@ void push_hl(void);                 // 0xE5 - Push 16-bit HL onto stack
 void and_a_n(unsigned char n);      // 0xE6 - Logical AND 8-bit immediate and A
 void rst_20(void);                  // 0xE7 - Call routine at address 0x0020
 void add_sp_d(char d);              // 0xE8 - Add signed 8-bit immediate to SP
-void jp_hl_v(void);                 // 0xE9 - Jump to 16-bit value pointed by HL
+void jp_hl(void);                   // 0xE9 - Jump to 16-bit value pointed by HL
 void ld_nn_a(unsigned short nn);    // 0xEA - Save A at given 16-bit address
 // Undefined                        // 0xEB
 // Undefined                        // 0xEC
@@ -287,8 +287,8 @@ void rst_30(void);                  // 0xF7 - Call routine at 0x0030
 void ldhl_sp_d(char d);             // 0xF8 - Add signed 8-bit immediate to SP and save result in HL
 void ld_sp_hl(void);                // 0xF9 - Copy HL to SP
 void ld_a_nn_v(unsigned short nn);  // 0xFA - Load A from given 16-bit address
-void ei(void);                      // 0xFB - Disable interrupts
+void ei(void);                      // 0xFB - Enable interrupts
 // Undefined                        // 0xFC
 // Undefined                        // 0xFD
-void cp_a_n(unsigned char n);         // 0xFE - Compare 8-bit immediate against A
+void cp_a_n(unsigned char n);       // 0xFE - Compare 8-bit immediate against A
 void rst_38(void);                  // 0xFF - Call routine at address 0x0038
