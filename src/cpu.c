@@ -195,6 +195,14 @@ const struct instruction instructions[256] = {
     {"OR A L", or_a_l, 0, 4},
     {"OR A (HL)", or_a_hl_v, 0, 8},
     {"OR A A", or_a_a, 0, 4},
+    {"CP A B", cp_a_b, 0, 4},
+    {"CP A C", cp_a_c, 0, 4},
+    {"CP A D", cp_a_d, 0, 4},
+    {"CP A E", cp_a_e, 0, 4},
+    {"CP A H", cp_a_h, 0, 4},
+    {"CP A L", cp_a_l, 0, 4},
+    {"CP A (HL)", cp_a_hl_v, 0, 8},
+    {"CP A A", cp_a_a, 0, 4},
     // Template: {"", , , },
 };
 
@@ -982,3 +990,27 @@ void or_a_hl_v(void) { registers.a = or_n(readByte(registers.hl)); }
 
 // 0xB7
 void or_a_a(void) { registers.a = or_n(registers.a); }
+
+// 0xB8
+void cp_a_b(void) { sub_n(registers.b); }
+
+// 0xB9
+void cp_a_c(void) { sub_n(registers.c); }
+
+// 0xBA
+void cp_a_d(void) { sub_n(registers.d); }
+
+// 0xBB
+void cp_a_e(void) { sub_n(registers.e); }
+
+// 0xBC
+void cp_a_h(void) { sub_n(registers.h); }
+
+// 0xBD
+void cp_a_l(void) { sub_n(registers.l); }
+
+// 0xBE
+void cp_a_hl_v(void) { sub_n(readByte(registers.hl)); }
+
+// 0xBF
+void cp_a_a(void) { sub_n(registers.a); }

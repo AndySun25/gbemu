@@ -214,14 +214,14 @@ void or_a_h(void);                  // 0xB4 - Logical OR H against A
 void or_a_l(void);                  // 0xB5 - Logical OR L against A
 void or_a_hl_v(void);               // 0xB6 - Logical OR value pointed by HL against A
 void or_a_a(void);                  // 0xB7 - Logical OR A against A
-void cp_b(void);                    // 0xB8 - Compare B against A
-void cp_c(void);                    // 0xB9 - Compare C against A
-void cp_d(void);                    // 0xBA - Compare D against A
-void cp_e(void);                    // 0xBB - Compare E against A
-void cp_h(void);                    // 0xBC - Compare H against A
-void cp_l(void);                    // 0xBD - Compare L against A
-void cp_hl_v(void);                 // 0xBE - Compare value pointed by HL against A
-void cp_a(void);                    // 0xBF - Compare A against A
+void cp_a_b(void);                    // 0xB8 - Compare B against A
+void cp_a_c(void);                    // 0xB9 - Compare C against A
+void cp_a_d(void);                    // 0xBA - Compare D against A
+void cp_a_e(void);                    // 0xBB - Compare E against A
+void cp_a_h(void);                    // 0xBC - Compare H against A
+void cp_a_l(void);                    // 0xBD - Compare L against A
+void cp_a_hl_v(void);                 // 0xBE - Compare value pointed by HL against A
+void cp_a_a(void);                    // 0xBF - Compare A against A
 
 void ret_nz(void);                  // 0xC0 - Return if last result was not zero
 void pop_bc(void);                  // 0xC1 - Pop 16-bit value from stack into BC
@@ -288,5 +288,5 @@ void ld_a_nn_v(unsigned short nn);  // 0xFA - Load A from given 16-bit address
 void ei(void);                      // 0xFB - Disable interrupts
 // Undefined                        // 0xFC
 // Undefined                        // 0xFD
-void cp_n(unsigned char n);         // 0xFE - Compare 8-bit immediate against A
+void cp_a_n(unsigned char n);         // 0xFE - Compare 8-bit immediate against A
 void rst_38(void);                  // 0xFF - Call routine at address 0x0038
