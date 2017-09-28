@@ -1,7 +1,13 @@
-#define FLAG_Z  1 << 7          // If last CP result == 0
-#define FLAG_N  1 << 6          // If last math instruction was subtract
+#define FLAG_Z  1 << 7          // Zero
+#define FLAG_N  1 << 6          // Negative
 #define FLAG_H  1 << 5          // Half carry
 #define FLAG_C  1 << 4          // Carry
+
+#define INT_VBLANK  1 << 0
+#define INT_LCDSTAT 1 << 1
+#define INT TIMER   1 << 2
+#define INT_SERIAL  1 << 3
+#define INT_JOYPAD  1 << 4
 
 #define flagIsSet(flag) (unsigned char) (registers.flags & (flag))
 #define flagSet(flag, value) (registers.flags = (value) ? (registers.flags | (flag)) : (registers.flags & ~(flag)))
@@ -13,12 +19,19 @@ struct instruction {
     unsigned char base_cycles;
 } extern const instructions[256];
 
+struct interrupts {
+    unsigned char ime;
+    unsigned char interrupt_flags;
+    unsigned char interrupt_enable;
+} extern interrupts;
+
 extern unsigned long cycles;
 
 
 void reset(void);
 void cycle(void);
 
+// Opcodes
 void undefined(void);
 
 void nop(void);                     // 0x00 - No operation

@@ -269,6 +269,9 @@ const struct instruction instructions[256] = {
     {"RST 38", rst_38, 0, 16},
 };
 
+
+struct interrupts interrupts;
+
 unsigned long cycles;
 
 
@@ -1280,7 +1283,7 @@ void pop_af(void) { registers.af = popStack(); }
 
 // 0xF3
 void di(void) {
-    // TODO implement interrupts
+    interrupts.ime = 0;
 }
 
 // 0xF5
@@ -1312,7 +1315,7 @@ void ld_a_nn_v(unsigned short nn) { registers.a = readByte(nn); }
 
 // 0xFB
 void ei(void) {
-    // TODO implement interrupts
+    interrupts.ime = 1;
 }
 
 // 0xFE
