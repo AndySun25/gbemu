@@ -1,3 +1,5 @@
+#pragma once
+
 #define FLAG_Z  1 << 7          // Zero
 #define FLAG_N  1 << 6          // Negative
 #define FLAG_H  1 << 5          // Half carry
