@@ -1,3 +1,5 @@
+#pragma once
+
 // 0x0000-0x00FF Restart and interrupt vector table
 // 0x0100-0x014F Catridge header
 // 0x0150-0x3FFF ROM bank 0 (fixed)
@@ -36,6 +38,9 @@ unsigned char hram[0x80];
 // unsigned char mbc_type;
 // unsigned char current_rom_bank;
 // unsigned char current_ram_bank;
+
+void debugWriteByte(unsigned short address, unsigned char n);
+void debugWriteShort(unsigned short address, unsigned short n);
 
 void writeByte(unsigned short address, unsigned char n);
 void writeShort(unsigned short address, unsigned short nn);

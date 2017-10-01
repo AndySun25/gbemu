@@ -432,6 +432,7 @@ void reset(void)
     // Reset registers
     registers.pc = 0x0100;
     registers.sp = 0xFFFE;
+    registers.af = registers.bc = registers.de = registers.hl = 0;
     cycles = 0;
 }
 

@@ -36,6 +36,43 @@ void setmbc()
 }
  */
 
+void debugWriteByte(unsigned short address, unsigned char n)
+{
+    if (address >= 0x0 && address <= 0x3FFF)
+        fcart[address] = n;
+    else if (address >= 0x4000 && address <= 0x7FFF)
+        rom_bank[address - 0x8000] = n;
+    else if (address >= 0x8000 && address <= 0x9FFF)
+        vram[address - 0x8000] = n;
+    else if (address >= 0xA000 && address <= 0xBFFF)
+        ram_bank[address - 0xA000] = n;
+    else if (address >= 0xC000 && address <= 0xDFFF)
+        iram[address - 0xC000] = n;
+    else if (address >= 0xE000 && address <= 0xFDFF)
+        echo[address - 0xE000] = n;
+    else if (address >= 0xFE00 && address <= 0xFE9F)
+        oam[address - 0xFE00] = n;
+    else if (address >= 0xFEA0 && address <= 0xFEFF)
+        return;
+    else if (address >= 0xFF00 && address <= 0xFF7F)
+        io[address - 0xFF00] = n;
+    else if (address >= 0xFF80 && address <= 0xFFFE)
+        hram[address - 0xFF80] = n;
+    else if (address == 0xFFFF)
+        interrupts.ime = n;
+    else
+    {
+        printf("Invalid memory write at address %X", address);
+        exit(1);
+    }
+}
+
+void debugWriteShort(unsigned short address, unsigned short nn)
+{
+    debugWriteByte(address, (unsigned char) (nn >> 8));
+    debugWriteByte(address + 1, (unsigned char) nn);
+}
+
 
 void writeByte(unsigned short address, unsigned char n)
 {
@@ -67,7 +104,6 @@ void writeByte(unsigned short address, unsigned char n)
         printf("Invalid memory write at address %X", address);
         exit(1);
     }
-
 }
 
 void writeShort(unsigned short address, unsigned short nn)
