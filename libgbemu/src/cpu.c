@@ -275,7 +275,8 @@ struct interrupts interrupts;
 unsigned long cycles;
 
 
-unsigned char add_n_n(unsigned char t, unsigned char n) {
+unsigned char add_n_n(unsigned char t, unsigned char n)
+{
     unsigned int res = t + n;
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 0);
@@ -284,7 +285,8 @@ unsigned char add_n_n(unsigned char t, unsigned char n) {
     return (unsigned char) res;
 }
 
-unsigned char adc_n(unsigned char n) {
+unsigned char adc_n(unsigned char n)
+{
     unsigned int res = registers.a + n + flagIsSet(FLAG_C);
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 0);
@@ -293,7 +295,8 @@ unsigned char adc_n(unsigned char n) {
     return (unsigned char) res;
 }
 
-unsigned char sub_n(unsigned char n) {
+unsigned char sub_n(unsigned char n)
+{
     unsigned char res = registers.a - n;
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 1);
@@ -302,7 +305,8 @@ unsigned char sub_n(unsigned char n) {
     return res;
 }
 
-unsigned char sbc_n(unsigned char n) {
+unsigned char sbc_n(unsigned char n)
+{
     unsigned char res = registers.a - (n + flagIsSet(FLAG_C));
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 1);
@@ -311,7 +315,8 @@ unsigned char sbc_n(unsigned char n) {
     return res;
 }
 
-unsigned char inc_n(unsigned char t) {
+unsigned char inc_n(unsigned char t)
+{
     unsigned char res = t + (unsigned char) 1;
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 0);
@@ -319,7 +324,8 @@ unsigned char inc_n(unsigned char t) {
     return res;
 }
 
-unsigned char dec_n(unsigned char t) {
+unsigned char dec_n(unsigned char t)
+{
     unsigned char res = t - (unsigned char) 1;
     flagSet(FLAG_Z, ~res);
     flagSet(FLAG_N, 1);
@@ -328,16 +334,19 @@ unsigned char dec_n(unsigned char t) {
 }
 
 // For uniformity purposes
-unsigned short inc_nn(unsigned short t) {
+unsigned short inc_nn(unsigned short t)
+{
     return ++t;
 }
 
 // For uniformity purposes
-unsigned short dec_nn(unsigned short t) {
+unsigned short dec_nn(unsigned short t)
+{
     return --t;
 }
 
-unsigned char and_n(unsigned char n) {
+unsigned char and_n(unsigned char n)
+{
     unsigned char res = registers.a & n;
     flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_N, 0);
@@ -346,7 +355,8 @@ unsigned char and_n(unsigned char n) {
     return res;
 }
 
-unsigned char xor_n(unsigned char n) {
+unsigned char xor_n(unsigned char n)
+{
     unsigned char res = registers.a ^ n;
     flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_N, 0);
@@ -355,7 +365,8 @@ unsigned char xor_n(unsigned char n) {
     return res;
 }
 
-unsigned char or_n(unsigned char n) {
+unsigned char or_n(unsigned char n)
+{
     unsigned char res = registers.a | n;
     flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_N, 0);
@@ -364,7 +375,8 @@ unsigned char or_n(unsigned char n) {
     return res;
 }
 
-unsigned char rlc_n(unsigned char t) {
+unsigned char rlc_n(unsigned char t)
+{
     flagSet(FLAG_C, t & 0b10000000);
     t <<= 1;
     flagSet(FLAG_Z, t == 0);
@@ -373,7 +385,8 @@ unsigned char rlc_n(unsigned char t) {
     return t;
 }
 
-unsigned char rl_n(unsigned char t) {
+unsigned char rl_n(unsigned char t)
+{
     unsigned char carry = flagIsSet(FLAG_C);
     flagSet(FLAG_C, t & 0b10000000);
     t <<= 1;
@@ -384,7 +397,8 @@ unsigned char rl_n(unsigned char t) {
     return t;
 }
 
-unsigned char rrc_n(unsigned char t) {
+unsigned char rrc_n(unsigned char t)
+{
     flagSet(FLAG_C, t & 0x01);
     t >>= 1;
     flagSet(FLAG_Z, t == 0);
@@ -392,7 +406,8 @@ unsigned char rrc_n(unsigned char t) {
     flagSet(FLAG_N, 0);
 }
 
-unsigned char rr_n(unsigned char t) {
+unsigned char rr_n(unsigned char t)
+{
     unsigned char carry = flagIsSet(FLAG_C) << 7;
     flagSet(FLAG_C, t & 0x01);
     t >>= 1;
@@ -403,7 +418,8 @@ unsigned char rr_n(unsigned char t) {
     return t;
 }
 
-unsigned short add_nn_nn(unsigned short t, unsigned short nn) {
+unsigned short add_nn_nn(unsigned short t, unsigned short nn)
+{
     unsigned long res = t + nn;
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, ((t & 0xFFF) + (nn & 0xFFF)) > 0xFFF);
@@ -411,30 +427,35 @@ unsigned short add_nn_nn(unsigned short t, unsigned short nn) {
     return (unsigned short) res;
 }
 
-void reset(void) {
+void reset(void)
+{
     // Reset registers
     registers.pc = 0x0100;
     registers.sp = 0xFFFE;
     cycles = 0;
 }
 
-void cycle(void) {
+void cycle(void)
+{
     unsigned char instruction;
 
     instruction = readByte(registers.pc++);
     void *func = instructions[instruction].func;
 
 
-    switch (instructions[instruction].operand_length) {
+    switch (instructions[instruction].operand_length)
+    {
         case 0:
             ((void (*)(void)) func)();
             break;
-        case 1: {
+        case 1:
+        {
             unsigned char operand = readByte(registers.pc++);
             ((void (*)(unsigned char n)) func)(operand);
             break;
         }
-        case 2: {
+        case 2:
+        {
             unsigned short operand = readShort(registers.pc);
             registers.pc += 2;
             ((void (*)(unsigned short nn)) func)(operand);
@@ -448,7 +469,8 @@ void cycle(void) {
     cycles += instructions[instruction].base_cycles;
 }
 
-void undefined(void) {
+void undefined(void)
+{
     printf("Illegal opcode detected at %x!", registers.pc - 1);
     exit(0);
 }
@@ -550,8 +572,10 @@ void ld_e_n(unsigned char n) { registers.e = n; }
 void rr_a(void) { registers.a = rr_n(registers.a); }
 
 // 0x20
-void jr_nz_n(short n) {
-    if (~flagIsSet(FLAG_Z)) {
+void jr_nz_n(short n)
+{
+    if (~flagIsSet(FLAG_Z))
+    {
         registers.pc += n;
         cycles += 4;
     }
@@ -576,13 +600,16 @@ void dec_h(void) { registers.h = dec_n(registers.h); }
 void ld_h_n(unsigned char n) { registers.h = n; }
 
 // 0x27
-void daa(void) {
+void daa(void)
+{
     unsigned int res = registers.a;
-    if ((res & 0x0F) > 9 || flagIsSet(FLAG_H)) {
+    if ((res & 0x0F) > 9 || flagIsSet(FLAG_H))
+    {
         res += 0x06;
     }
 
-    if ((res >> 4) > 9 || flagIsSet(FLAG_C)) {
+    if ((res >> 4) > 9 || flagIsSet(FLAG_C))
+    {
         res += 0x60;
     }
 
@@ -593,8 +620,10 @@ void daa(void) {
 }
 
 // 0x28
-void jr_z_n (char n) {
-    if (flagIsSet(FLAG_Z)) {
+void jr_z_n (char n)
+{
+    if (flagIsSet(FLAG_Z))
+    {
         registers.pc += n;
         cycles += 4;
     }
@@ -604,7 +633,8 @@ void jr_z_n (char n) {
 void add_hl_hl(void) { registers.hl += registers.hl; }
 
 // 0x2A
-void ldi_a_hl_v(void) {
+void ldi_a_hl_v(void)
+{
     registers.a = readByte(registers.hl++);
 }
 
@@ -621,15 +651,18 @@ void dec_l(void) { registers.l = dec_n(registers.l); }
 void ld_l_n(unsigned char n) { registers.l = n; }
 
 // 0x2F
-void cpl_a(void) {
+void cpl_a(void)
+{
     registers.a = ~registers.a;
     flagSet(FLAG_N, 1);
     flagSet(FLAG_H, 1);
 }
 
 // 0x30
-void jr_nc_n(short n) {
-    if (~flagIsSet(FLAG_C)) {
+void jr_nc_n(short n)
+{
+    if (~flagIsSet(FLAG_C))
+    {
         registers.pc += n;
         cycles += 4;
     }
@@ -654,15 +687,18 @@ void dec_hl_v(void) { writeByte(registers.hl, dec_n(readByte(registers.hl))); }
 void ld_hl_v_n(unsigned char n) { writeByte(registers.hl, n); }
 
 // 0x37
-void scf(void) {
+void scf(void)
+{
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_C, 1);
 }
 
 // 0x38
-void jr_c_n(short n) {
-    if (flagIsSet(FLAG_C)) {
+void jr_c_n(short n)
+{
+    if (flagIsSet(FLAG_C))
+    {
         registers.pc += n;
         cycles += 4;
     }
@@ -672,7 +708,8 @@ void jr_c_n(short n) {
 void add_hl_sp(void) { registers.sp += registers.hl; }
 
 // 0x3A
-void ldd_a_hl_v(void) {
+void ldd_a_hl_v(void)
+{
     registers.a = readByte(registers.hl--);
 }
 
@@ -689,7 +726,8 @@ void dec_a(void) { registers.a = dec_n(registers.a); }
 void ld_a_n(unsigned char n) { registers.a = n; }
 
 // 0x3F
-void ccf(void) {
+void ccf(void)
+{
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_C, ~flagIsSet(FLAG_C));
@@ -1059,8 +1097,10 @@ void cp_a_hl_v(void) { sub_n(readByte(registers.hl)); }
 void cp_a_a(void) { sub_n(registers.a); }
 
 // 0xC0
-void ret_nz(void) {
-    if (~flagIsSet(FLAG_Z)) {
+void ret_nz(void)
+{
+    if (~flagIsSet(FLAG_Z))
+    {
         registers.pc = popStack();
         cycles += 12;
     }
@@ -1070,21 +1110,26 @@ void ret_nz(void) {
 void pop_bc(void) { registers.bc = popStack(); }
 
 // 0xC2
-void jp_nz_nn(unsigned short nn) {
-    if (~flagIsSet(FLAG_Z)) {
+void jp_nz_nn(unsigned short nn)
+{
+    if (~flagIsSet(FLAG_Z))
+    {
         registers.pc = nn;
         cycles += 4;
     }
 }
 
 // 0xC3
-void jp_nn(unsigned short nn) {
+void jp_nn(unsigned short nn)
+{
     registers.pc = nn;
 }
 
 // 0xC4
-void call_nz_nn(unsigned short nn) {
-    if (~flagIsSet(FLAG_Z)) {
+void call_nz_nn(unsigned short nn)
+{
+    if (~flagIsSet(FLAG_Z))
+    {
         pushStack(registers.pc);
         registers.pc = nn;
         cycles += 12;
@@ -1098,40 +1143,49 @@ void push_bc(void) { pushStack(registers.bc); }
 void add_a_n(unsigned char n) { registers.a = add_n_n(registers.a, n); }
 
 // 0xC7
-void rst_0(void) {
+void rst_0(void)
+{
     pushStack(registers.pc);
     registers.pc = 0;
 }
 
 // 0xC8
-void ret_z(void) {
-    if (flagIsSet(FLAG_Z)) {
+void ret_z(void)
+{
+    if (flagIsSet(FLAG_Z))
+    {
         registers.pc = popStack();
         cycles += 12;
     }
 }
 
 // 0xC9
-void ret(void) {
+void ret(void)
+{
     registers.pc = popStack();
 }
 
 // 0xCA
-void jp_z_nn(unsigned short nn) {
-    if (flagIsSet(FLAG_Z)) {
+void jp_z_nn(unsigned short nn)
+{
+    if (flagIsSet(FLAG_Z))
+    {
         registers.pc = nn;
         cycles += 4;
     }
 }
 
 // 0xCB
-void ext_ops(void) {
+void ext_ops(void)
+{
     // TODO implement this
 }
 
 // 0xCC
-void call_z_nn(unsigned short nn) {
-    if (flagIsSet(FLAG_Z)) {
+void call_z_nn(unsigned short nn)
+{
+    if (flagIsSet(FLAG_Z))
+    {
         pushStack(registers.pc);
         registers.pc = nn;
         cycles += 12;
@@ -1139,7 +1193,8 @@ void call_z_nn(unsigned short nn) {
 }
 
 // 0xCD
-void call_nn(unsigned short nn) {
+void call_nn(unsigned short nn)
+{
     pushStack(registers.pc);
     registers.pc = nn;
 }
@@ -1148,14 +1203,17 @@ void call_nn(unsigned short nn) {
 void adc_a_n(unsigned char n) { registers.a = adc_n(n); }
 
 // 0xCF
-void rst_8(void) {
+void rst_8(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x8;
 }
 
 // 0xD0
-void ret_nc(void) {
-    if (~flagIsSet(FLAG_C)) {
+void ret_nc(void)
+{
+    if (~flagIsSet(FLAG_C))
+    {
         registers.pc = popStack();
         cycles += 12;
     }
@@ -1165,16 +1223,20 @@ void ret_nc(void) {
 void pop_de(void) { registers.de = popStack(); }
 
 // 0xD2
-void jp_nc_nn(unsigned short nn) {
-    if (~flagIsSet(FLAG_C)) {
+void jp_nc_nn(unsigned short nn)
+{
+    if (~flagIsSet(FLAG_C))
+    {
         registers.pc = nn;
         cycles += 4;
     }
 }
 
 // 0xD4
-void call_nc_nn(unsigned short nn) {
-    if (~flagIsSet(FLAG_C)) {
+void call_nc_nn(unsigned short nn)
+{
+    if (~flagIsSet(FLAG_C))
+    {
         pushStack(registers.pc);
         registers.pc = nn;
         cycles += 12;
@@ -1188,36 +1250,44 @@ void push_de(void) { pushStack(registers.de); }
 void sub_a_n(unsigned char n) { registers.a = sub_n(n); }
 
 // 0xD7
-void rst_10(void) {
+void rst_10(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x10;
 }
 
 // 0xD8
-void ret_c(void) {
-    if (flagIsSet(FLAG_C)) {
+void ret_c(void)
+{
+    if (flagIsSet(FLAG_C))
+    {
         registers.pc = popStack();
         cycles += 12;
     }
 }
 
 // 0xD9
-void reti(void) {
+void reti(void)
+{
     registers.pc = popStack();
     // TODO interrupt stuff
 }
 
 // 0xDA
-void jp_c_nn(unsigned short nn) {
-    if (flagIsSet(FLAG_C)) {
+void jp_c_nn(unsigned short nn)
+{
+    if (flagIsSet(FLAG_C))
+    {
         registers.pc = nn;
         cycles += 4;
     }
 }
 
 // 0xDC
-void call_c_nn(unsigned short nn) {
-    if (flagIsSet(FLAG_C)) {
+void call_c_nn(unsigned short nn)
+{
+    if (flagIsSet(FLAG_C))
+    {
         pushStack(registers.pc);
         registers.pc = nn;
         cycles += 12;
@@ -1228,7 +1298,8 @@ void call_c_nn(unsigned short nn) {
 void sbc_a_n(unsigned char n) { registers.a = sbc_n(n); }
 
 // 0xDF
-void rst_18(void) {
+void rst_18(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x18;
 }
@@ -1249,7 +1320,8 @@ void push_hl(void) { pushStack(registers.hl); }
 void and_a_n(unsigned char n) { registers.a = and_n(n); }
 
 // 0xE7
-void rst_20(void) {
+void rst_20(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x20;
 }
@@ -1258,7 +1330,8 @@ void rst_20(void) {
 void add_sp_d(char d) { registers.sp += d; }
 
 // 0xE9
-void jp_hl(void) {
+void jp_hl(void)
+{
     registers.pc = registers.hl;
     cycles += 4;
 }
@@ -1270,7 +1343,8 @@ void ld_nn_a(unsigned short nn) { writeByte(nn, registers.a); }
 void xor_a_n(unsigned char n) { registers.a = xor_n(n); }
 
 // 0xEF
-void rst_28(void) {
+void rst_28(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x28;
 }
@@ -1282,7 +1356,8 @@ void ldh_a_n(unsigned char n) { registers.a = readByte((unsigned short) 0xFF00 +
 void pop_af(void) { registers.af = popStack(); }
 
 // 0xF3
-void di(void) {
+void di(void)
+{
     interrupts.ime = 0;
 }
 
@@ -1293,13 +1368,15 @@ void push_af(void) { pushStack(registers.af); }
 void or_a_n(unsigned char n) { registers.a = or_n(n); }
 
 // 0xF7
-void rst_30(void) {
+void rst_30(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x30;
 }
 
 // 0xF8
-void ldhl_sp_d(char d) {
+void ldhl_sp_d(char d)
+{
     unsigned long res = registers.sp + d;
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, ((registers.sp & 0xFFF) + (d & 0xFFF)) > 0xFFF);
@@ -1314,7 +1391,8 @@ void ld_sp_hl(void) { registers.sp = registers.hl; }
 void ld_a_nn_v(unsigned short nn) { registers.a = readByte(nn); }
 
 // 0xFB
-void ei(void) {
+void ei(void)
+{
     interrupts.ime = 1;
 }
 
@@ -1322,7 +1400,8 @@ void ei(void) {
 void cp_a_n(unsigned char n) { sub_n(n); }
 
 // 0xFF
-void rst_38(void) {
+void rst_38(void)
+{
     pushStack(registers.pc);
     registers.pc = 0x38;
 }
