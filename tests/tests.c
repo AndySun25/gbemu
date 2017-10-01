@@ -1,5 +1,4 @@
 #include <check.h>
-#include <stdlib.h>
 #include "memory.h"
 #include "cpu.h"
 
