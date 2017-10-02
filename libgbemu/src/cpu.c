@@ -335,6 +335,70 @@ const struct instruction extended[256] = {
     {"SRL L", srl_l, 0, 8},
     {"SRL (HL)", srl_hl_v, 0, 16},
     {"SRL A", srl_a, 0, 8},
+    {"BIT 0,B", bit_0_b, 0, 8},
+    {"BIT 0,C", bit_0_c, 0, 8},
+    {"BIT 0,D", bit_0_d, 0, 8},
+    {"BIT 0,E", bit_0_e, 0, 8},
+    {"BIT 0,H", bit_0_h, 0, 8},
+    {"BIT 0,L", bit_0_l, 0, 8},
+    {"BIT 0,(HL)", bit_0_hl_v, 0, 8},
+    {"BIT 0,A", bit_0_a, 0, 8},
+    {"BIT 1,B", bit_1_b, 0, 8},
+    {"BIT 1,C", bit_1_c, 0, 8},
+    {"BIT 1,D", bit_1_d, 0, 8},
+    {"BIT 1,E", bit_1_e, 0, 8},
+    {"BIT 1,H", bit_1_h, 0, 8},
+    {"BIT 1,L", bit_1_l, 0, 8},
+    {"BIT 1,(HL)", bit_1_hl_v, 0, 8},
+    {"BIT 1,A", bit_1_a, 0, 8},
+    {"BIT 2,B", bit_2_b, 0, 8},
+    {"BIT 2,C", bit_2_c, 0, 8},
+    {"BIT 2,D", bit_2_d, 0, 8},
+    {"BIT 2,E", bit_2_e, 0, 8},
+    {"BIT 2,H", bit_2_h, 0, 8},
+    {"BIT 2,L", bit_2_l, 0, 8},
+    {"BIT 2,(HL)", bit_2_hl_v, 0, 8},
+    {"BIT 2,A", bit_2_a, 0, 8},
+    {"BIT 3,B", bit_3_b, 0, 8},
+    {"BIT 3,C", bit_3_c, 0, 8},
+    {"BIT 3,D", bit_3_d, 0, 8},
+    {"BIT 3,E", bit_3_e, 0, 8},
+    {"BIT 3,H", bit_3_h, 0, 8},
+    {"BIT 3,L", bit_3_l, 0, 8},
+    {"BIT 3,(HL)", bit_3_hl_v, 0, 8},
+    {"BIT 3,A", bit_3_a, 0, 8},
+    {"BIT 4,B", bit_4_b, 0, 8},
+    {"BIT 4,C", bit_4_c, 0, 8},
+    {"BIT 4,D", bit_4_d, 0, 8},
+    {"BIT 4,E", bit_4_e, 0, 8},
+    {"BIT 4,H", bit_4_h, 0, 8},
+    {"BIT 4,L", bit_4_l, 0, 8},
+    {"BIT 4,(HL)", bit_4_hl_v, 0, 8},
+    {"BIT 4,A", bit_4_a, 0, 8},
+    {"BIT 5,B", bit_5_b, 0, 8},
+    {"BIT 5,C", bit_5_c, 0, 8},
+    {"BIT 5,D", bit_5_d, 0, 8},
+    {"BIT 5,E", bit_5_e, 0, 8},
+    {"BIT 5,H", bit_5_h, 0, 8},
+    {"BIT 5,L", bit_5_l, 0, 8},
+    {"BIT 5,(HL)", bit_5_hl_v, 0, 8},
+    {"BIT 5,A", bit_5_a, 0, 8},
+    {"BIT 6,B", bit_6_b, 0, 8},
+    {"BIT 6,C", bit_6_c, 0, 8},
+    {"BIT 6,D", bit_6_d, 0, 8},
+    {"BIT 6,E", bit_6_e, 0, 8},
+    {"BIT 6,H", bit_6_h, 0, 8},
+    {"BIT 6,L", bit_6_l, 0, 8},
+    {"BIT 6,(HL)", bit_6_hl_v, 0, 8},
+    {"BIT 6,A", bit_6_a, 0, 8},
+    {"BIT 7,B", bit_7_b, 0, 8},
+    {"BIT 7,C", bit_7_c, 0, 8},
+    {"BIT 7,D", bit_7_d, 0, 8},
+    {"BIT 7,E", bit_7_e, 0, 8},
+    {"BIT 7,H", bit_7_h, 0, 8},
+    {"BIT 7,L", bit_7_l, 0, 8},
+    {"BIT 7,(HL)", bit_7_hl_v, 0, 8},
+    {"BIT 7,A", bit_7_a, 0, 8},
 };
 
 
@@ -1701,3 +1765,195 @@ void srl_hl_v(void) { writeByte(registers.hl, srl_n(readByte(registers.hl))); }
 
 // 0x3F
 void srl_a(void) { registers.a = srl_n(registers.a); }
+
+// 0x40
+void bit_0_b(void) { bit_n(registers.b, 0); }
+
+// 0x41
+void bit_0_c(void) { bit_n(registers.c, 0); }
+
+// 0x42
+void bit_0_d(void) { bit_n(registers.d, 0); }
+
+// 0x43
+void bit_0_e(void) { bit_n(registers.e, 0); }
+
+// 0x44
+void bit_0_h(void) { bit_n(registers.h, 0); }
+
+// 0x45
+void bit_0_l(void) { bit_n(registers.l, 0); }
+
+// 0x46
+void bit_0_hl_v(void) { bit_n(readByte(registers.hl), 0); }
+
+// 0x47
+void bit_0_a(void) { bit_n(registers.a, 0); }
+
+// 0x48
+void bit_1_b(void) { bit_n(registers.b, 1); }
+
+// 0x49
+void bit_1_c(void) { bit_n(registers.c, 1); }
+
+// 0x4A
+void bit_1_d(void) { bit_n(registers.d, 1); }
+
+// 0x4B
+void bit_1_e(void) { bit_n(registers.e, 1); }
+
+// 0x4C
+void bit_1_h(void) { bit_n(registers.h, 1); }
+
+// 0x4D
+void bit_1_l(void) { bit_n(registers.l, 1); }
+
+// 0x4E
+void bit_1_hl_v(void) { bit_n(readByte(registers.hl), 1); }
+
+// 0x4F
+void bit_1_a(void) { bit_n(registers.a, 1); }
+
+// 0x50
+void bit_2_b(void) { bit_n(registers.b, 2); }
+
+// 0x51
+void bit_2_c(void) { bit_n(registers.c, 2); }
+
+// 0x52
+void bit_2_d(void) { bit_n(registers.d, 2); }
+
+// 0x53
+void bit_2_e(void) { bit_n(registers.e, 2); }
+
+// 0x54
+void bit_2_h(void) { bit_n(registers.h, 2); }
+
+// 0x55
+void bit_2_l(void) { bit_n(registers.l, 2); }
+
+// 0x56
+void bit_2_hl_v(void) { bit_n(readByte(registers.hl), 2); }
+
+// 0x57
+void bit_2_a(void) { bit_n(registers.a, 2); }
+
+// 0x58
+void bit_3_b(void) { bit_n(registers.b, 3); }
+
+// 0x59
+void bit_3_c(void) { bit_n(registers.c, 3); }
+
+// 0x5A
+void bit_3_d(void) { bit_n(registers.d, 3); }
+
+// 0x5B
+void bit_3_e(void) { bit_n(registers.e, 3); }
+
+// 0x5C
+void bit_3_h(void) { bit_n(registers.h, 3); }
+
+// 0x5D
+void bit_3_l(void) { bit_n(registers.l, 3); }
+
+// 0x5E
+void bit_3_hl_v(void) { bit_n(readByte(registers.hl), 3); }
+
+// 0x5F
+void bit_3_a(void) { bit_n(registers.a, 3); }
+
+// 0x60
+void bit_4_b(void) { bit_n(registers.b, 4); }
+
+// 0x61
+void bit_4_c(void) { bit_n(registers.c, 4); }
+
+// 0x62
+void bit_4_d(void) { bit_n(registers.d, 4); }
+
+// 0x63
+void bit_4_e(void) { bit_n(registers.e, 4); }
+
+// 0x64
+void bit_4_h(void) { bit_n(registers.h, 4); }
+
+// 0x65
+void bit_4_l(void) { bit_n(registers.l, 4); }
+
+// 0x66
+void bit_4_hl_v(void) { bit_n(readByte(registers.hl), 4); }
+
+// 0x67
+void bit_4_a(void) { bit_n(registers.a, 4); }
+
+// 0x68
+void bit_5_b(void) { bit_n(registers.b, 5); }
+
+// 0x69
+void bit_5_c(void) { bit_n(registers.c, 5); }
+
+// 0x6A
+void bit_5_d(void) { bit_n(registers.d, 5); }
+
+// 0x6B
+void bit_5_e(void) { bit_n(registers.e, 5); }
+
+// 0x6C
+void bit_5_h(void) { bit_n(registers.h, 5); }
+
+// 0x6D
+void bit_5_l(void) { bit_n(registers.l, 5); }
+
+// 0x6E
+void bit_5_hl_v(void) { bit_n(readByte(registers.hl), 5); }
+
+// 0x6F
+void bit_5_a(void) { bit_n(registers.a, 5); }
+
+// 0x70
+void bit_6_b(void) { bit_n(registers.b, 6); }
+
+// 0x71
+void bit_6_c(void) { bit_n(registers.c, 6); }
+
+// 0x72
+void bit_6_d(void) { bit_n(registers.d, 6); }
+
+// 0x73
+void bit_6_e(void) { bit_n(registers.e, 6); }
+
+// 0x74
+void bit_6_h(void) { bit_n(registers.h, 6); }
+
+// 0x75
+void bit_6_l(void) { bit_n(registers.l, 6); }
+
+// 0x76
+void bit_6_hl_v(void) { bit_n(readByte(registers.hl), 6); }
+
+// 0x77
+void bit_6_a(void) { bit_n(registers.a, 6); }
+
+// 0x78
+void bit_7_b(void) { bit_n(registers.b, 7); }
+
+// 0x79
+void bit_7_c(void) { bit_n(registers.c, 7); }
+
+// 0x7A
+void bit_7_d(void) { bit_n(registers.d, 7); }
+
+// 0x7B
+void bit_7_e(void) { bit_n(registers.e, 7); }
+
+// 0x7C
+void bit_7_h(void) { bit_n(registers.h, 7); }
+
+// 0x7D
+void bit_7_l(void) { bit_n(registers.l, 7); }
+
+// 0x7E
+void bit_7_hl_v(void) { bit_n(readByte(registers.hl), 7); }
+
+// 0x7F
+void bit_7_a(void) { bit_n(registers.a, 7); }
