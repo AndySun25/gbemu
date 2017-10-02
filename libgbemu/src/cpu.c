@@ -18,7 +18,7 @@ const struct instruction instructions[256] = {
     {"INC B", inc_b, 0, 4},
     {"DEC B", dec_b, 0, 4},
     {"LD B n", ld_b_n, 1, 8},
-    {"RLC A", rlc_a, 0, 4},
+    {"RLC A", rlca, 0, 4},
     {"LD nn SP", ld_nn_sp, 2, 20},
     {"ADD HL BC", add_hl_bc, 0, 8},
     {"LD A (BC)", ld_a_bc_v, 0, 8},
@@ -26,7 +26,7 @@ const struct instruction instructions[256] = {
     {"INC C", inc_c, 0, 4},
     {"DEC C", dec_c, 0, 4},
     {"LD C n", ld_c_n, 1, 8},
-    {"RRC A", rrc_a, 0, 4},
+    {"RRC A", rrca, 0, 4},
     {"STOP", stop, 0, 4},
     {"LD DE nn", ld_de_nn, 2, 12},
     {"LD (DE) A", ld_de_v_a, 0, 8},
@@ -34,7 +34,7 @@ const struct instruction instructions[256] = {
     {"INC D", inc_d, 0, 4},
     {"DEC D", dec_d, 0, 4},
     {"LD D n", ld_d_n, 1, 8},
-    {"RL A", rl_a, 0, 4},
+    {"RL A", rla, 0, 4},
     {"JR n", jr_n, 1, 12},
     {"ADD HL DE", add_hl_de, 0, 8},
     {"LD A (DE)", ld_a_de_v, 0, 8},
@@ -42,7 +42,7 @@ const struct instruction instructions[256] = {
     {"INC E", inc_e, 0, 4},
     {"DEC E", dec_e, 0, 4},
     {"LD E n", ld_e_n, 1, 8},
-    {"RR A", rr_a, 0, 4},
+    {"RR A", rra, 0, 4},
     {"JR NZ n", jr_nz_n, 1, 8},     // 8 cycles min, 12 if jumping (handled in func)
     {"LD HL nn", ld_hl_nn, 2, 12},
     {"LDI (HL) A", ldi_hl_v_a, 0, 8},
@@ -267,6 +267,11 @@ const struct instruction instructions[256] = {
     {"Undefined", undefined, 0, 0},
     {"CP A n", cp_a_n, 1, 8},
     {"RST 38", rst_38, 0, 16},
+};
+
+
+const struct instruction extended[256] = {
+
 };
 
 
@@ -498,7 +503,7 @@ void dec_b(void) { registers.b = dec_n(registers.b); }
 void ld_b_n(unsigned char n) { registers.b = n; }
 
 // 0x07
-void rlc_a(void) { registers.a = rlc_n(registers.a); }
+void rlca(void) { registers.a = rlc_n(registers.a); }
 
 // 0x08
 void ld_nn_sp(unsigned short nn) { writeShort(nn, registers.sp); }
@@ -522,7 +527,7 @@ void dec_c(void) { registers.c = dec_n(registers.c); }
 void ld_c_n(unsigned char n) { registers.c = n; }
 
 // 0x0F
-void rrc_a(void) { registers.a = rrc_n(registers.a); }
+void rrca(void) { registers.a = rrc_n(registers.a); }
 
 // 0x10
 void stop(void) { stopped = true; }
@@ -546,7 +551,7 @@ void dec_d(void) { registers.d = dec_n(registers.d); }
 void ld_d_n(unsigned char n) { registers.d = n; }
 
 // 0x17
-void rl_a(void) { registers.a = rl_n(registers.a); }
+void rla(void) { registers.a = rl_n(registers.a); }
 
 // 0x18
 void jr_n(short n) { registers.pc += n; }
@@ -570,7 +575,7 @@ void dec_e(void) { registers.e = dec_n(registers.e); }
 void ld_e_n(unsigned char n) { registers.e = n; }
 
 // 0x1F
-void rr_a(void) { registers.a = rr_n(registers.a); }
+void rra(void) { registers.a = rr_n(registers.a); }
 
 // 0x20
 void jr_nz_n(short n)
