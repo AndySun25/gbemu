@@ -214,7 +214,7 @@ const struct instruction instructions[256] = {
     {"RET Z", ret_z, 0, 8},
     {"RET", ret, 0, 16},
     {"JP Z nn", jp_z_nn, 2, 12},        // 12 min, 16 on jump
-    {"EXT OPS", ext_ops, 0, 4},
+    {"EXT OPS", ext_ops, 0, 0},
     {"CALL Z nn", call_z_nn, 2, 12},    // 12 min, 24 on call
     {"CALL nn", call_nn, 2, 24},
     {"ADC A n", adc_a_n, 1, 8},
@@ -271,7 +271,70 @@ const struct instruction instructions[256] = {
 
 
 const struct instruction extended[256] = {
-
+    {"RLC B", rlc_b, 0, 8},
+    {"RLC C", rlc_c, 0, 8},
+    {"RLC D", rlc_d, 0, 8},
+    {"RLC E", rlc_e, 0, 8},
+    {"RLC H", rlc_h, 0, 8},
+    {"RLC L", rlc_l, 0, 8},
+    {"RLC (HL)", rlc_hl_v, 0, 16},
+    {"RLC A", rlca, 0, 8},
+    {"RRC B", rrc_b, 0, 8},
+    {"RRC C", rrc_c, 0, 8},
+    {"RRC D", rrc_d, 0, 8},
+    {"RRC E", rrc_e, 0, 8},
+    {"RRC H", rrc_h, 0, 8},
+    {"RRC L", rrc_l, 0, 8},
+    {"RRC (HL)", rrc_hl_v, 0, 16},
+    {"RRC A", rrca, 0, 8},
+    {"RL B", rl_b, 0, 8},
+    {"RL C", rl_c, 0, 8},
+    {"RL D", rl_d, 0, 8},
+    {"RL E", rl_e, 0, 8},
+    {"RL H", rl_h, 0, 8},
+    {"RL L", rl_l, 0, 8},
+    {"RL (HL)", rl_hl_v, 0, 16},
+    {"RL A", rla, 0, 8},
+    {"RR B", rr_b, 0, 8},
+    {"RR C", rr_c, 0, 8},
+    {"RR D", rr_d, 0, 8},
+    {"RR E", rr_e, 0, 8},
+    {"RR H", rr_h, 0, 8},
+    {"RR L", rr_l, 0, 8},
+    {"RR (HL)", rr_hl_v, 0, 16},
+    {"RR A", rra, 0, 8},
+    {"SLA B", sla_b, 0, 8},
+    {"SLA C", sla_c, 0, 8},
+    {"SLA D", sla_d, 0, 8},
+    {"SLA E", sla_e, 0, 8},
+    {"SLA H", sla_h, 0, 8},
+    {"SLA L", sla_l, 0, 8},
+    {"SLA (HL)", sla_hl_v, 0, 16},
+    {"SLA A", sla_a, 0, 8},
+    {"SRA B", sra_b, 0, 8},
+    {"SRA C", sra_c, 0, 8},
+    {"SRA D", sra_d, 0, 8},
+    {"SRA E", sra_e, 0, 8},
+    {"SRA H", sra_h, 0, 8},
+    {"SRA L", sra_l, 0, 8},
+    {"SRA (HL)", sra_hl_v, 0, 16},
+    {"SRA A", sra_a, 0, 8},
+    {"SWAP B", swap_b, 0, 8},
+    {"SWAP C", swap_c, 0, 8},
+    {"SWAP D", swap_d, 0, 8},
+    {"SWAP E", swap_e, 0, 8},
+    {"SWAP H", swap_h, 0, 8},
+    {"SWAP L", swap_l, 0, 8},
+    {"SWAP (HL)", swap_hl_v, 0, 16},
+    {"SWAP A", swap_a, 0, 8},
+    {"SRL B", srl_b, 0, 8},
+    {"SRL C", srl_c, 0, 8},
+    {"SRL D", srl_d, 0, 8},
+    {"SRL E", srl_e, 0, 8},
+    {"SRL H", srl_h, 0, 8},
+    {"SRL L", srl_l, 0, 8},
+    {"SRL (HL)", srl_hl_v, 0, 16},
+    {"SRL A", srl_a, 0, 8},
 };
 
 
@@ -430,6 +493,50 @@ unsigned short add_nn_nn(unsigned short t, unsigned short nn)
     flagSet(FLAG_H, ((t & 0xFFF) + (nn & 0xFFF)) > 0xFFF);
     flagSet(FLAG_C, res & 0xFFFF0000);
     return (unsigned short) res;
+}
+
+unsigned char sla_n(unsigned char t)
+{
+    unsigned char res = t << 1;
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, t & 0b10000000);
+}
+
+unsigned char sra_n(unsigned char t)
+{
+    unsigned char res = (t >> 1) | (unsigned char) (t & 0b10000000);
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, t & 0x1);
+}
+
+unsigned char swap_n(unsigned char t)
+{
+    unsigned char res = (t >> 4) | (unsigned char) (t << 4 & 0xF0);
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, 0);
+    return res;
+}
+
+unsigned char srl_n(unsigned char t)
+{
+    unsigned char res = (t >> 1);
+    flagSet(FLAG_Z, res == 0);
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 0);
+    flagSet(FLAG_C, t & 0x1);
+}
+
+void bit_n(unsigned char t, short pos)
+{
+    flagSet(FLAG_Z, t & (1 << pos));
+    flagSet(FLAG_N, 0);
+    flagSet(FLAG_H, 1);
 }
 
 void reset(void)
@@ -1411,3 +1518,186 @@ void rst_38(void)
     pushStack(registers.pc);
     registers.pc = 0x38;
 }
+
+
+// Extended instructions
+
+// 0x00
+void rlc_b(void) { registers.b = rlc_n(registers.b); }
+
+// 0x01
+void rlc_c(void) { registers.c = rlc_n(registers.c); }
+
+// 0x02
+void rlc_d(void) { registers.d = rlc_n(registers.d); }
+
+// 0x03
+void rlc_e(void) { registers.e = rlc_n(registers.e); }
+
+// 0x04
+void rlc_h(void) { registers.h = rlc_n(registers.h); }
+
+// 0x05
+void rlc_l(void) { registers.l = rlc_n(registers.l); }
+
+// 0x06
+void rlc_hl_v(void) { writeByte(registers.hl, rlc_n(readByte(registers.hl))); }
+
+// 0x08
+void rrc_b(void) { registers.b = rrc_n(registers.b); }
+
+// 0x09
+void rrc_c(void) { registers.c = rrc_n(registers.c); }
+
+// 0x0A
+void rrc_d(void) { registers.d = rrc_n(registers.d); }
+
+// 0x0B
+void rrc_e(void) { registers.e = rrc_n(registers.e); }
+
+// 0x0C
+void rrc_h(void) { registers.h = rrc_n(registers.h); }
+
+// 0x0D
+void rrc_l(void) { registers.l = rrc_n(registers.l); }
+
+// 0x0E
+void rrc_hl_v(void) { writeByte(registers.hl, rrc_n(readByte(registers.hl))); }
+
+// 0x10
+void rl_b(void) { registers.b = rl_n(registers.b); }
+
+// 0x11
+void rl_c(void) { registers.c = rl_n(registers.c); }
+
+// 0x12
+void rl_d(void) { registers.d = rl_n(registers.d); }
+
+// 0x13
+void rl_e(void) { registers.e = rl_n(registers.e); }
+
+// 0x14
+void rl_h(void) { registers.h = rl_n(registers.h); }
+
+// 0x15
+void rl_l(void) { registers.l = rl_n(registers.l); }
+
+// 0x16
+void rl_hl_v(void) { writeByte(registers.hl, rl_n(readByte(registers.hl))); }
+
+// 0x18
+void rr_b(void) { registers.b = rr_n(registers.b); }
+
+// 0x19
+void rr_c(void) { registers.c = rr_n(registers.c); }
+
+// 0x1A
+void rr_d(void) { registers.d = rr_n(registers.d); }
+
+// 0x1B
+void rr_e(void) { registers.e = rr_n(registers.e); }
+
+// 0x1C
+void rr_h(void) { registers.h = rr_n(registers.h); }
+
+// 0x1D
+void rr_l(void) { registers.l = rr_n(registers.l); }
+
+// 0x1E
+void rr_hl_v(void) { writeByte(registers.hl, rr_n(readByte(registers.hl))); }
+
+// 0x20
+void sla_b(void) { registers.b = sla_n(registers.b); }
+
+// 0x21
+void sla_c(void) { registers.c = sla_n(registers.c); }
+
+// 0x22
+void sla_d(void) { registers.d = sla_n(registers.d); }
+
+// 0x23
+void sla_e(void) { registers.e = sla_n(registers.e); }
+
+// 0x24
+void sla_h(void) { registers.h = sla_n(registers.h); }
+
+// 0x25
+void sla_l(void) { registers.l = sla_n(registers.l); }
+
+// 0x26
+void sla_hl_v(void) { writeByte(registers.hl, sla_n(readByte(registers.hl))); }
+
+// 0x27
+void sla_a(void) { registers.a = sla_n(registers.a); }
+
+// 0x28
+void sra_b(void) { registers.b = sra_n(registers.b); }
+
+// 0x29
+void sra_c(void) { registers.c = sra_n(registers.c); }
+
+// 0x2A
+void sra_d(void) { registers.d = sra_n(registers.d); }
+
+// 0x2B
+void sra_e(void) { registers.e = sra_n(registers.e); }
+
+// 0x2C
+void sra_h(void) { registers.h = sra_n(registers.h); }
+
+// 0x2D
+void sra_l(void) { registers.l = sra_n(registers.l); }
+
+// 0x2E
+void sra_hl_v(void) { writeByte(registers.hl, sra_n(readByte(registers.hl))); }
+
+// 0x2F
+void sra_a(void) { registers.a = sra_n(registers.a); }
+
+// 0x30
+void swap_b(void) { registers.b = swap_n(registers.b); }
+
+// 0x31
+void swap_c(void) { registers.c = swap_n(registers.c); }
+
+// 0x32
+void swap_d(void) { registers.d = swap_n(registers.d); }
+
+// 0x33
+void swap_e(void) { registers.e = swap_n(registers.e); }
+
+// 0x34
+void swap_h(void) { registers.h = swap_n(registers.h); }
+
+// 0x35
+void swap_l(void) { registers.l = swap_n(registers.l); }
+
+// 0x36
+void swap_hl_v(void) { writeByte(registers.hl, swap_n(readByte(registers.hl))); }
+
+// 0x37
+void swap_a(void) { registers.a = swap_n(registers.a); }
+
+// 0x38
+void srl_b(void) { registers.b = srl_n(registers.b); }
+
+// 0x39
+void srl_c(void) { registers.c = srl_n(registers.c); }
+
+// 0x3A
+void srl_d(void) { registers.d = srl_n(registers.d); }
+
+// 0x3B
+void srl_e(void) { registers.e = srl_n(registers.e); }
+
+// 0x3C
+void srl_h(void) { registers.h = srl_n(registers.h); }
+
+// 0x3D
+void srl_l(void) { registers.l = srl_n(registers.l); }
+
+// 0x3E
+void srl_hl_v(void) { writeByte(registers.hl, srl_n(readByte(registers.hl))); }
+
+// 0x3F
+void srl_a(void) { registers.a = srl_n(registers.a); }

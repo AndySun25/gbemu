@@ -3,5 +3,5 @@
 
 int main()
 {
-    printf("This is the main file.");
+    printf("This is the main file.\n");
 }
