@@ -509,45 +509,44 @@ unsigned char or_n(unsigned char n)
 
 unsigned char rlc_n(unsigned char t)
 {
+    unsigned char res = t << 1;
     flagSet(FLAG_C, t & 0b10000000);
-    t <<= 1;
-    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_N, 0);
-    return t;
+    return res;
 }
 
 unsigned char rl_n(unsigned char t)
 {
     unsigned char carry = flagIsSet(FLAG_C);
+    unsigned char res = (t << 1) | carry;
     flagSet(FLAG_C, t & 0b10000000);
-    t <<= 1;
-    t |= carry;
-    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_N, 0);
-    return t;
+    return res;
 }
 
 unsigned char rrc_n(unsigned char t)
 {
+    unsigned char res = t >> 1;
     flagSet(FLAG_C, t & 0x01);
-    t >>= 1;
-    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_N, 0);
+    return res;
 }
 
 unsigned char rr_n(unsigned char t)
 {
     unsigned char carry = flagIsSet(FLAG_C) << 7;
+    unsigned char res = (t >> 1) | carry;
     flagSet(FLAG_C, t & 0x01);
-    t >>= 1;
-    t |= carry;
-    flagSet(FLAG_Z, t == 0);
+    flagSet(FLAG_Z, res == 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_N, 0);
-    return t;
+    return res;
 }
 
 unsigned short add_nn_nn(unsigned short t, unsigned short nn)
@@ -566,6 +565,7 @@ unsigned char sla_n(unsigned char t)
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_C, t & 0b10000000);
+    return res;
 }
 
 unsigned char sra_n(unsigned char t)
@@ -575,6 +575,7 @@ unsigned char sra_n(unsigned char t)
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_C, t & 0x1);
+    return res;
 }
 
 unsigned char swap_n(unsigned char t)
@@ -594,6 +595,7 @@ unsigned char srl_n(unsigned char t)
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 0);
     flagSet(FLAG_C, t & 0x1);
+    return res;
 }
 
 void bit_n(unsigned char t, short pos)
