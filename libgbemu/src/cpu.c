@@ -789,7 +789,7 @@ void cycle(void)
 void undefined(void)
 {
     printf("Illegal opcode detected at %x!", registers.pc - 1);
-    exit(0);
+    exit(1);
 }
 
 // 0x00
