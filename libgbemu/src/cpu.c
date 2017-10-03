@@ -399,6 +399,134 @@ const struct instruction extended[256] = {
     {"BIT 7,L", bit_7_l, 0, 8},
     {"BIT 7,(HL)", bit_7_hl_v, 0, 8},
     {"BIT 7,A", bit_7_a, 0, 8},
+    {"RES 0,B", res_0_b, 0, 8},
+    {"RES 0,C", res_0_c, 0, 8},
+    {"RES 0,D", res_0_d, 0, 8},
+    {"RES 0,E", res_0_e, 0, 8},
+    {"RES 0,H", res_0_h, 0, 8},
+    {"RES 0,L", res_0_l, 0, 8},
+    {"RES 0,(HL)", res_0_hl_v, 0, 8},
+    {"RES 0,A", res_0_a, 0, 8},
+    {"RES 1,B", res_1_b, 0, 8},
+    {"RES 1,C", res_1_c, 0, 8},
+    {"RES 1,D", res_1_d, 0, 8},
+    {"RES 1,E", res_1_e, 0, 8},
+    {"RES 1,H", res_1_h, 0, 8},
+    {"RES 1,L", res_1_l, 0, 8},
+    {"RES 1,(HL)", res_1_hl_v, 0, 8},
+    {"RES 1,A", res_1_a, 0, 8},
+    {"RES 2,B", res_2_b, 0, 8},
+    {"RES 2,C", res_2_c, 0, 8},
+    {"RES 2,D", res_2_d, 0, 8},
+    {"RES 2,E", res_2_e, 0, 8},
+    {"RES 2,H", res_2_h, 0, 8},
+    {"RES 2,L", res_2_l, 0, 8},
+    {"RES 2,(HL)", res_2_hl_v, 0, 8},
+    {"RES 2,A", res_2_a, 0, 8},
+    {"RES 3,B", res_3_b, 0, 8},
+    {"RES 3,C", res_3_c, 0, 8},
+    {"RES 3,D", res_3_d, 0, 8},
+    {"RES 3,E", res_3_e, 0, 8},
+    {"RES 3,H", res_3_h, 0, 8},
+    {"RES 3,L", res_3_l, 0, 8},
+    {"RES 3,(HL)", res_3_hl_v, 0, 8},
+    {"RES 3,A", res_3_a, 0, 8},
+    {"RES 4,B", res_4_b, 0, 8},
+    {"RES 4,C", res_4_c, 0, 8},
+    {"RES 4,D", res_4_d, 0, 8},
+    {"RES 4,E", res_4_e, 0, 8},
+    {"RES 4,H", res_4_h, 0, 8},
+    {"RES 4,L", res_4_l, 0, 8},
+    {"RES 4,(HL)", res_4_hl_v, 0, 8},
+    {"RES 4,A", res_4_a, 0, 8},
+    {"RES 5,B", res_5_b, 0, 8},
+    {"RES 5,C", res_5_c, 0, 8},
+    {"RES 5,D", res_5_d, 0, 8},
+    {"RES 5,E", res_5_e, 0, 8},
+    {"RES 5,H", res_5_h, 0, 8},
+    {"RES 5,L", res_5_l, 0, 8},
+    {"RES 5,(HL)", res_5_hl_v, 0, 8},
+    {"RES 5,A", res_5_a, 0, 8},
+    {"RES 6,B", res_6_b, 0, 8},
+    {"RES 6,C", res_6_c, 0, 8},
+    {"RES 6,D", res_6_d, 0, 8},
+    {"RES 6,E", res_6_e, 0, 8},
+    {"RES 6,H", res_6_h, 0, 8},
+    {"RES 6,L", res_6_l, 0, 8},
+    {"RES 6,(HL)", res_6_hl_v, 0, 8},
+    {"RES 6,A", res_6_a, 0, 8},
+    {"RES 7,B", res_7_b, 0, 8},
+    {"RES 7,C", res_7_c, 0, 8},
+    {"RES 7,D", res_7_d, 0, 8},
+    {"RES 7,E", res_7_e, 0, 8},
+    {"RES 7,H", res_7_h, 0, 8},
+    {"RES 7,L", res_7_l, 0, 8},
+    {"RES 7,(HL)", res_7_hl_v, 0, 8},
+    {"RES 7,A", res_7_a, 0, 8},
+    {"SET 0,B", set_0_b, 0, 8},
+    {"SET 0,C", set_0_c, 0, 8},
+    {"SET 0,D", set_0_d, 0, 8},
+    {"SET 0,E", set_0_e, 0, 8},
+    {"SET 0,H", set_0_h, 0, 8},
+    {"SET 0,L", set_0_l, 0, 8},
+    {"SET 0,(HL)", set_0_hl_v, 0, 8},
+    {"SET 0,A", set_0_a, 0, 8},
+    {"SET 1,B", set_1_b, 0, 8},
+    {"SET 1,C", set_1_c, 0, 8},
+    {"SET 1,D", set_1_d, 0, 8},
+    {"SET 1,E", set_1_e, 0, 8},
+    {"SET 1,H", set_1_h, 0, 8},
+    {"SET 1,L", set_1_l, 0, 8},
+    {"SET 1,(HL)", set_1_hl_v, 0, 8},
+    {"SET 1,A", set_1_a, 0, 8},
+    {"SET 2,B", set_2_b, 0, 8},
+    {"SET 2,C", set_2_c, 0, 8},
+    {"SET 2,D", set_2_d, 0, 8},
+    {"SET 2,E", set_2_e, 0, 8},
+    {"SET 2,H", set_2_h, 0, 8},
+    {"SET 2,L", set_2_l, 0, 8},
+    {"SET 2,(HL)", set_2_hl_v, 0, 8},
+    {"SET 2,A", set_2_a, 0, 8},
+    {"SET 3,B", set_3_b, 0, 8},
+    {"SET 3,C", set_3_c, 0, 8},
+    {"SET 3,D", set_3_d, 0, 8},
+    {"SET 3,E", set_3_e, 0, 8},
+    {"SET 3,H", set_3_h, 0, 8},
+    {"SET 3,L", set_3_l, 0, 8},
+    {"SET 3,(HL)", set_3_hl_v, 0, 8},
+    {"SET 3,A", set_3_a, 0, 8},
+    {"SET 4,B", set_4_b, 0, 8},
+    {"SET 4,C", set_4_c, 0, 8},
+    {"SET 4,D", set_4_d, 0, 8},
+    {"SET 4,E", set_4_e, 0, 8},
+    {"SET 4,H", set_4_h, 0, 8},
+    {"SET 4,L", set_4_l, 0, 8},
+    {"SET 4,(HL)", set_4_hl_v, 0, 8},
+    {"SET 4,A", set_4_a, 0, 8},
+    {"SET 5,B", set_5_b, 0, 8},
+    {"SET 5,C", set_5_c, 0, 8},
+    {"SET 5,D", set_5_d, 0, 8},
+    {"SET 5,E", set_5_e, 0, 8},
+    {"SET 5,H", set_5_h, 0, 8},
+    {"SET 5,L", set_5_l, 0, 8},
+    {"SET 5,(HL)", set_5_hl_v, 0, 8},
+    {"SET 5,A", set_5_a, 0, 8},
+    {"SET 6,B", set_6_b, 0, 8},
+    {"SET 6,C", set_6_c, 0, 8},
+    {"SET 6,D", set_6_d, 0, 8},
+    {"SET 6,E", set_6_e, 0, 8},
+    {"SET 6,H", set_6_h, 0, 8},
+    {"SET 6,L", set_6_l, 0, 8},
+    {"SET 6,(HL)", set_6_hl_v, 0, 8},
+    {"SET 6,A", set_6_a, 0, 8},
+    {"SET 7,B", set_7_b, 0, 8},
+    {"SET 7,C", set_7_c, 0, 8},
+    {"SET 7,D", set_7_d, 0, 8},
+    {"SET 7,E", set_7_e, 0, 8},
+    {"SET 7,H", set_7_h, 0, 8},
+    {"SET 7,L", set_7_l, 0, 8},
+    {"SET 7,(HL)", set_7_hl_v, 0, 8},
+    {"SET 7,A", set_7_a, 0, 8},
 };
 
 
@@ -603,6 +731,16 @@ void bit_n(unsigned char t, short pos)
     flagSet(FLAG_Z, t & (1 << pos));
     flagSet(FLAG_N, 0);
     flagSet(FLAG_H, 1);
+}
+
+unsigned char res_n(unsigned char t, short pos)
+{
+    return t & (unsigned char) ~(1 << pos);
+}
+
+unsigned char set_n(unsigned char t, short pos)
+{
+    return t | (unsigned char) (1 << pos);
 }
 
 void reset(void)
@@ -1959,3 +2097,387 @@ void bit_7_hl_v(void) { bit_n(readByte(registers.hl), 7); }
 
 // 0x7F
 void bit_7_a(void) { bit_n(registers.a, 7); }
+
+// 0x80
+void res_0_b(void) { registers.b = res_n(registers.b, 0); }
+
+// 0x81
+void res_0_c(void) { registers.c = res_n(registers.c, 0); }
+
+// 0x82
+void res_0_d(void) { registers.d = res_n(registers.d, 0); }
+
+// 0x83
+void res_0_e(void) { registers.e = res_n(registers.e, 0); }
+
+// 0x84
+void res_0_h(void) { registers.h = res_n(registers.h, 0); }
+
+// 0x85
+void res_0_l(void) { registers.l = res_n(registers.l, 0); }
+
+// 0x86
+void res_0_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 0)); }
+
+// 0x87
+void res_0_a(void) { registers.a = res_n(registers.a, 0); }
+
+// 0x88
+void res_1_b(void) { registers.b = res_n(registers.b, 1); }
+
+// 0x89
+void res_1_c(void) { registers.c = res_n(registers.c, 1); }
+
+// 0x8A
+void res_1_d(void) { registers.d = res_n(registers.d, 1); }
+
+// 0x8B
+void res_1_e(void) { registers.e = res_n(registers.e, 1); }
+
+// 0x8C
+void res_1_h(void) { registers.h = res_n(registers.h, 1); }
+
+// 0x8D
+void res_1_l(void) { registers.l = res_n(registers.l, 1); }
+
+// 0x8E
+void res_1_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 1)); }
+
+// 0x8F
+void res_1_a(void) { registers.a = res_n(registers.a, 1); }
+
+// 0x90
+void res_2_b(void) { registers.b = res_n(registers.b, 2); }
+
+// 0x91
+void res_2_c(void) { registers.c = res_n(registers.c, 2); }
+
+// 0x92
+void res_2_d(void) { registers.d = res_n(registers.d, 2); }
+
+// 0x93
+void res_2_e(void) { registers.e = res_n(registers.e, 2); }
+
+// 0x94
+void res_2_h(void) { registers.h = res_n(registers.h, 2); }
+
+// 0x95
+void res_2_l(void) { registers.l = res_n(registers.l, 2); }
+
+// 0x96
+void res_2_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 2)); }
+
+// 0x97
+void res_2_a(void) { registers.a = res_n(registers.a, 2); }
+
+// 0x98
+void res_3_b(void) { registers.b = res_n(registers.b, 3); }
+
+// 0x99
+void res_3_c(void) { registers.c = res_n(registers.c, 3); }
+
+// 0x9A
+void res_3_d(void) { registers.d = res_n(registers.d, 3); }
+
+// 0x9B
+void res_3_e(void) { registers.e = res_n(registers.e, 3); }
+
+// 0x9C
+void res_3_h(void) { registers.h = res_n(registers.h, 3); }
+
+// 0x9D
+void res_3_l(void) { registers.l = res_n(registers.l, 3); }
+
+// 0x9E
+void res_3_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 3)); }
+
+// 0x9F
+void res_3_a(void) { registers.a = res_n(registers.a, 3); }
+
+// 0xA0
+void res_4_b(void) { registers.b = res_n(registers.b, 4); }
+
+// 0xA1
+void res_4_c(void) { registers.c = res_n(registers.c, 4); }
+
+// 0xA2
+void res_4_d(void) { registers.d = res_n(registers.d, 4); }
+
+// 0xA3
+void res_4_e(void) { registers.e = res_n(registers.e, 4); }
+
+// 0xA4
+void res_4_h(void) { registers.h = res_n(registers.h, 4); }
+
+// 0xA5
+void res_4_l(void) { registers.l = res_n(registers.l, 4); }
+
+// 0xA6
+void res_4_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 4)); }
+
+// 0xA7
+void res_4_a(void) { registers.a = res_n(registers.a, 4); }
+
+// 0xA8
+void res_5_b(void) { registers.b = res_n(registers.b, 5); }
+
+// 0xA9
+void res_5_c(void) { registers.c = res_n(registers.c, 5); }
+
+// 0xAA
+void res_5_d(void) { registers.d = res_n(registers.d, 5); }
+
+// 0xAB
+void res_5_e(void) { registers.e = res_n(registers.e, 5); }
+
+// 0xAC
+void res_5_h(void) { registers.h = res_n(registers.h, 5); }
+
+// 0xAD
+void res_5_l(void) { registers.l = res_n(registers.l, 5); }
+
+// 0xAE
+void res_5_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 5)); }
+
+// 0xAF
+void res_5_a(void) { registers.a = res_n(registers.a, 5); }
+
+// 0xB0
+void res_6_b(void) { registers.b = res_n(registers.b, 6); }
+
+// 0xB1
+void res_6_c(void) { registers.c = res_n(registers.c, 6); }
+
+// 0xB2
+void res_6_d(void) { registers.d = res_n(registers.d, 6); }
+
+// 0xB3
+void res_6_e(void) { registers.e = res_n(registers.e, 6); }
+
+// 0xB4
+void res_6_h(void) { registers.h = res_n(registers.h, 6); }
+
+// 0xB5
+void res_6_l(void) { registers.l = res_n(registers.l, 6); }
+
+// 0xB6
+void res_6_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 6)); }
+
+// 0xB7
+void res_6_a(void) { registers.a = res_n(registers.a, 6); }
+
+// 0xB8
+void res_7_b(void) { registers.b = res_n(registers.b, 7); }
+
+// 0xB9
+void res_7_c(void) { registers.c = res_n(registers.c, 7); }
+
+// 0xBA
+void res_7_d(void) { registers.d = res_n(registers.d, 7); }
+
+// 0xBB
+void res_7_e(void) { registers.e = res_n(registers.e, 7); }
+
+// 0xBC
+void res_7_h(void) { registers.h = res_n(registers.h, 7); }
+
+// 0xBD
+void res_7_l(void) { registers.l = res_n(registers.l, 7); }
+
+// 0xBE
+void res_7_hl_v(void) { writeByte(registers.hl, res_n(readByte(registers.hl), 7)); }
+
+// 0xBF
+void res_7_a(void) { registers.a = res_n(registers.a, 7); }
+
+// 0xC0
+void set_0_b(void) { registers.b = set_n(registers.b, 0); }
+
+// 0xC1
+void set_0_c(void) { registers.c = set_n(registers.c, 0); }
+
+// 0xC2
+void set_0_d(void) { registers.d = set_n(registers.d, 0); }
+
+// 0xC3
+void set_0_e(void) { registers.e = set_n(registers.e, 0); }
+
+// 0xC4
+void set_0_h(void) { registers.h = set_n(registers.h, 0); }
+
+// 0xC5
+void set_0_l(void) { registers.l = set_n(registers.l, 0); }
+
+// 0xC6
+void set_0_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 0)); }
+
+// 0xC7
+void set_0_a(void) { registers.a = set_n(registers.a, 0); }
+
+// 0xC8
+void set_1_b(void) { registers.b = set_n(registers.b, 1); }
+
+// 0xC9
+void set_1_c(void) { registers.c = set_n(registers.c, 1); }
+
+// 0xCA
+void set_1_d(void) { registers.d = set_n(registers.d, 1); }
+
+// 0xCB
+void set_1_e(void) { registers.e = set_n(registers.e, 1); }
+
+// 0xCC
+void set_1_h(void) { registers.h = set_n(registers.h, 1); }
+
+// 0xCD
+void set_1_l(void) { registers.l = set_n(registers.l, 1); }
+
+// 0xCE
+void set_1_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 1)); }
+
+// 0xCF
+void set_1_a(void) { registers.a = set_n(registers.a, 1); }
+
+// 0xD0
+void set_2_b(void) { registers.b = set_n(registers.b, 2); }
+
+// 0xD1
+void set_2_c(void) { registers.c = set_n(registers.c, 2); }
+
+// 0xD2
+void set_2_d(void) { registers.d = set_n(registers.d, 2); }
+
+// 0xD3
+void set_2_e(void) { registers.e = set_n(registers.e, 2); }
+
+// 0xD4
+void set_2_h(void) { registers.h = set_n(registers.h, 2); }
+
+// 0xD5
+void set_2_l(void) { registers.l = set_n(registers.l, 2); }
+
+// 0xD6
+void set_2_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 2)); }
+
+// 0xD7
+void set_2_a(void) { registers.a = set_n(registers.a, 2); }
+
+// 0xD8
+void set_3_b(void) { registers.b = set_n(registers.b, 3); }
+
+// 0xD9
+void set_3_c(void) { registers.c = set_n(registers.c, 3); }
+
+// 0xDA
+void set_3_d(void) { registers.d = set_n(registers.d, 3); }
+
+// 0xDB
+void set_3_e(void) { registers.e = set_n(registers.e, 3); }
+
+// 0xDC
+void set_3_h(void) { registers.h = set_n(registers.h, 3); }
+
+// 0xDD
+void set_3_l(void) { registers.l = set_n(registers.l, 3); }
+
+// 0xDE
+void set_3_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 3)); }
+
+// 0xDF
+void set_3_a(void) { registers.a = set_n(registers.a, 3); }
+
+// 0xE0
+void set_4_b(void) { registers.b = set_n(registers.b, 4); }
+
+// 0xE1
+void set_4_c(void) { registers.c = set_n(registers.c, 4); }
+
+// 0xE2
+void set_4_d(void) { registers.d = set_n(registers.d, 4); }
+
+// 0xE3
+void set_4_e(void) { registers.e = set_n(registers.e, 4); }
+
+// 0xE4
+void set_4_h(void) { registers.h = set_n(registers.h, 4); }
+
+// 0xE5
+void set_4_l(void) { registers.l = set_n(registers.l, 4); }
+
+// 0xE6
+void set_4_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 4)); }
+
+// 0xE7
+void set_4_a(void) { registers.a = set_n(registers.a, 4); }
+
+// 0xE8
+void set_5_b(void) { registers.b = set_n(registers.b, 5); }
+
+// 0xE9
+void set_5_c(void) { registers.c = set_n(registers.c, 5); }
+
+// 0xEA
+void set_5_d(void) { registers.d = set_n(registers.d, 5); }
+
+// 0xEB
+void set_5_e(void) { registers.e = set_n(registers.e, 5); }
+
+// 0xEC
+void set_5_h(void) { registers.h = set_n(registers.h, 5); }
+
+// 0xED
+void set_5_l(void) { registers.l = set_n(registers.l, 5); }
+
+// 0xEE
+void set_5_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 5)); }
+
+// 0xEF
+void set_5_a(void) { registers.a = set_n(registers.a, 5); }
+
+// 0xF0
+void set_6_b(void) { registers.b = set_n(registers.b, 6); }
+
+// 0xF1
+void set_6_c(void) { registers.c = set_n(registers.c, 6); }
+
+// 0xF2
+void set_6_d(void) { registers.d = set_n(registers.d, 6); }
+
+// 0xF3
+void set_6_e(void) { registers.e = set_n(registers.e, 6); }
+
+// 0xF4
+void set_6_h(void) { registers.h = set_n(registers.h, 6); }
+
+// 0xF5
+void set_6_l(void) { registers.l = set_n(registers.l, 6); }
+
+// 0xF6
+void set_6_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 6)); }
+
+// 0xF7
+void set_6_a(void) { registers.a = set_n(registers.a, 6); }
+
+// 0xF8
+void set_7_b(void) { registers.b = set_n(registers.b, 7); }
+
+// 0xF9
+void set_7_c(void) { registers.c = set_n(registers.c, 7); }
+
+// 0xFA
+void set_7_d(void) { registers.d = set_n(registers.d, 7); }
+
+// 0xFB
+void set_7_e(void) { registers.e = set_n(registers.e, 7); }
+
+// 0xFC
+void set_7_h(void) { registers.h = set_n(registers.h, 7); }
+
+// 0xFD
+void set_7_l(void) { registers.l = set_n(registers.l, 7); }
+
+// 0xFE
+void set_7_hl_v(void) { writeByte(registers.hl, set_n(readByte(registers.hl), 7)); }
+
+// 0xFF
+void set_7_a(void) { registers.a = set_n(registers.a, 7); }
