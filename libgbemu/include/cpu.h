@@ -11,6 +11,8 @@
 #define INT_SERIAL  1 << 3
 #define INT_JOYPAD  1 << 4
 
+#define CLOCKSPEED 4194304
+
 #define flagIsSet(flag) (unsigned char) (registers.flags & (flag))
 #define flagSet(flag, value) (registers.flags = (value) ? (registers.flags | (flag)) : (registers.flags & ~(flag)))
 

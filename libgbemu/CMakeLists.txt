@@ -7,7 +7,14 @@ set(SOURCE_FILES main.c
     include/registers.h
     src/cpu.c
     src/memory.c
-    src/registers.c)
+    src/registers.c
+    include/timers.h
+    src/timers.c)
 
 add_executable(gbemu ${SOURCE_FILES})
-add_library(gbemulib src/cpu.c src/memory.c src/registers.c)
+add_library(gbemulib
+    src/cpu.c
+    src/memory.c
+    src/registers.c
+    include/timers.h
+    src/timers.c)
