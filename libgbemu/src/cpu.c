@@ -1495,7 +1495,12 @@ void jp_z_nn(unsigned short nn)
 // 0xCB
 void ext_ops(void)
 {
-    // TODO implement this
+    unsigned char instruction;
+
+    instruction = readByte(registers.pc++);
+    void *func = extended[instruction].func;
+    ((void (*)(void)) func)();
+    cycles += extended[instruction].base_cycles;
 }
 
 // 0xCC
